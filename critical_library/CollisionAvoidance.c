@@ -24,7 +24,7 @@ RT_MODEL_CollisionAvoidance_T *const CollisionAvoidance_M =
   &CollisionAvoidance_M_;
 
 /* Model step function */
-void CollisionAvoidance_step(void)
+void CollisionAvoidance_step(boolean_T* ca_light_on, real_T* ca_radar_sensor, real_T* ca_acceleration)
 {
   real_T rtb_TSamp;
   real_T rtb_TSamp_d;

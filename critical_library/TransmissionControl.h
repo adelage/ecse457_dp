@@ -54,10 +54,6 @@ struct tag_RTM_TransmissionControl_T {
   const char_T * volatile errorStatus;
 };
 
-/* Imported (extern) block signals */
-extern boolean_T warning_light;        /* '<S1>/Compare' */
-extern real32_T fluid_sensor;          /* '<Root>/Fluid Sensor' */
-
 /* Block parameters (auto storage) */
 extern P_TransmissionControl_T TransmissionControl_P;
 

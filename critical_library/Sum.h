@@ -43,11 +43,6 @@ struct tag_RTM_Sum_T {
   const char_T * volatile errorStatus;
 };
 
-/* Imported (extern) block signals */
-extern real32_T sum_out;               /* '<S1>/Sum' */
-extern real32_T sum_in1;               /* '<Root>/In1' */
-extern real32_T sum_in2;               /* '<Root>/In2' */
-
 /* Model entry point functions */
 extern void Sum_initialize(void);
 extern void Sum_step(void);

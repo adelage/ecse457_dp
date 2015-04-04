@@ -22,7 +22,7 @@ RT_MODEL_TractionControl_T TractionControl_M_;
 RT_MODEL_TractionControl_T *const TractionControl_M = &TractionControl_M_;
 
 /* Model step function */
-void TractionControl_step(void)
+void TractionControl_step(real_T* traction_control_feedback, real_T* current_speed_powered, real_T* current_speed_unpowered)
 {
   real_T rtb_Subtract;
 

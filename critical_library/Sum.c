@@ -22,7 +22,7 @@ RT_MODEL_Sum_T Sum_M_;
 RT_MODEL_Sum_T *const Sum_M = &Sum_M_;
 
 /* Model step function */
-void Sum_step(void)
+void Sum_step(real32_T* sum_out, real32_T* sum_in1, real32_T* sum_in2)
 {
   /* Sum: '<S1>/Sum' incorporates:
    *  Inport: '<Root>/In1'

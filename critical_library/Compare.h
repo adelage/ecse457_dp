@@ -49,10 +49,6 @@ struct tag_RTM_Compare_T {
   const char_T * volatile errorStatus;
 };
 
-/* Imported (extern) block signals */
-extern boolean_T compare_out;          /* '<S2>/Compare' */
-extern real_T compare_in;              /* '<Root>/In1' */
-
 /* Block parameters (auto storage) */
 extern P_Compare_T Compare_P;
 

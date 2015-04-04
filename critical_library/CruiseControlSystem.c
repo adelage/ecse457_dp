@@ -24,7 +24,7 @@ RT_MODEL_CruiseControlSystem_T *const CruiseControlSystem_M =
   &CruiseControlSystem_M_;
 
 /* Model step function */
-void CruiseControlSystem_step(void)
+void CruiseControlSystem_step(real_T* cc_current_speed, real_T* cc_desired_speed)
 {
   /* DiscreteIntegrator: '<S2>/Discrete-Time Integrator' */
   cc_current_speed = CruiseControlSystem_DW.DiscreteTimeIntegrator_DSTATE;

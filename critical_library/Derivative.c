@@ -23,7 +23,7 @@ RT_MODEL_Derivative_T Derivative_M_;
 RT_MODEL_Derivative_T *const Derivative_M = &Derivative_M_;
 
 /* Model step function */
-void Derivative_step(void)
+void Derivative_step(real_T* deriv_out, real_T* deriv_in)
 {
   real_T rtb_TSamp;
 

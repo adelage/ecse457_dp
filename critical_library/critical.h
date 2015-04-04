@@ -10,13 +10,25 @@
 
 #include "fingerprint.h"
 
-//These are tasks to be fingerprinted
-void critical_task(int count);
-void preempt_task(int priority);
+// Type definitions used to pass data to the tasks
+typedef struct airbag_args {
+	int priority;
+	real_T* deriv_out;			// Derivative stage's output
+	boolean_T* compare_out;		// Airbag stage's output
+}airbag_args;
 
-//These two tasks are used to save the values of callee saved
-//registers onto the stack before fingerprinting and restore them
-//after fingerprinting
+// These are tasks to be fingerprinted
+void airbag_task(void* args);
+void collision_avoidance_task(void* args);
+void cruise_control_task(void* args);
+void traction_control_task(void* args);
+void transmission_control_task(void* args);
+void derivative_task(void* args);
+void sum_task(void* args);
+
+// These two tasks are used to save the values of callee saved
+// registers onto the stack before fingerprinting and restore them
+// after fingerprinting
 extern void context_switch(long *reg_stack);
 extern void context_restore(long *reg_stack);
 

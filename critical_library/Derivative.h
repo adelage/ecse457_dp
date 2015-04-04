@@ -58,10 +58,6 @@ struct tag_RTM_Derivative_T {
   const char_T * volatile errorStatus;
 };
 
-/* Imported (extern) block signals */
-extern real_T deriv_out;               /* '<S2>/Diff' */
-extern real_T deriv_in;                /* '<Root>/In1' */
-
 /* Block parameters (auto storage) */
 extern P_Derivative_T Derivative_P;
 

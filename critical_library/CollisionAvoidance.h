@@ -67,11 +67,6 @@ struct tag_RTM_CollisionAvoidance_T {
   const char_T * volatile errorStatus;
 };
 
-/* Imported (extern) block signals */
-extern boolean_T ca_light_on;          /* '<S2>/Compare' */
-extern real_T ca_radar_sensor;         /* '<Root>/In1' */
-extern real_T ca_acceleration;         /* '<Root>/In2' */
-
 /* Block parameters (auto storage) */
 extern P_CollisionAvoidance_T CollisionAvoidance_P;
 

@@ -54,11 +54,6 @@ struct tag_RTM_TractionControl_T {
   const char_T * volatile errorStatus;
 };
 
-/* Imported (extern) block signals */
-extern real_T traction_control_feedback;/* '<Root>/Product' */
-extern real_T current_speed_powered;   /* '<Root>/Current Speed(Powered Axle)' */
-extern real_T current_speed_unpowered; /* '<Root>/Speed(Unpowered Axle)' */
-
 /* Block parameters (auto storage) */
 extern P_TractionControl_T TractionControl_P;
 

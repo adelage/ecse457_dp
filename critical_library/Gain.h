@@ -49,10 +49,6 @@ struct tag_RTM_Gain_T {
   const char_T * volatile errorStatus;
 };
 
-/* Imported (extern) block signals */
-extern real32_T gain_out;              /* '<S1>/Gain' */
-extern real32_T gain_in;               /* '<Root>/In1' */
-
 /* Block parameters (auto storage) */
 extern P_Gain_T Gain_P;
 

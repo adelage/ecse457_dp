@@ -19,31 +19,55 @@
 #include "FuelSensor.h"
 #include "TractionControl.h"
 #include "TransmissionControl.h"
+#include "Gain.h"
+#include "Sum.h"
+#include "Derivative.h"
+#include "Compare.h"
 #include "rtwtypes.h"                  /* MathWorks ty*/
 
-void write_led(int count) {
+// Tasks to be fingerprinted
 
-	IOWR_ALTERA_AVALON_PIO_DATA(0x10, count);
+// Airbag task, calls AirbagModel.c, Gain.c and Compare.c functions
+void airbag_task(void* args) {
+	// Get data from input arguments
+	airbag_args* a = (airbag_args*)args;
+
+	// Local variables
+	real32_T* gain_out;
+	
+
+	// Fingerprinting task
+	enable_fprint_task(a->priority);
+
+	disable_fprint_task(a->priority);
 }
 
+// Collision Avoidance task, calls CollisionAvoidance.c functions
+void collision_avoidance_task(void* args) {
+	
+}
 
-#define UNLIMIT
-#define MAXARRAY 10000
-/* this number, if too large, will cause a seg. fault!! */
+// Cruise Control task, calls CruiseControlSystem.c functions
+void cruise_control_task(void* args) {
+	
+}
 
-void critical_task(int priority) {
+// Traction Control task, calls TractionControl.c functions
+void traction_control_task(void* args) {
+	
+}
 
-		enable_fprint_task(priority);
+// Transmission Control task, calls TransmissionControl.c functions
+void transmission_control_task(void* args) {
+	
+}
 
-
-		disable_fprint_task(priority);
+// Derivative task, calls Derivative.c functions
+void derivative_task(void* args) {
 
 }
 
-void preempt_task(int priority){
-
-	enable_fprint_task(priority);
-
-
-	disable_fprint_task(priority);
+// Sum task, calls Sum.c functions
+void sum_task(void* args) {
+	
 }

@@ -57,10 +57,6 @@ struct tag_RTM_FuelSensor_T {
   const char_T * volatile errorStatus;
 };
 
-/* Imported (extern) block signals */
-extern boolean_T fs_warning_light;     /* '<Root>/Light on  ' */
-extern real32_T fs_fuel_level;         /* '<Root>/Fuel Level' */
-
 /* Block parameters (auto storage) */
 extern P_FuelSensor_T FuelSensor_P;
 

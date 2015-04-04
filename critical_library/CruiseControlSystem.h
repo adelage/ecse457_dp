@@ -77,10 +77,6 @@ struct tag_RTM_CruiseControlSystem_T {
   const char_T * volatile errorStatus;
 };
 
-/* Imported (extern) block signals */
-extern real_T cc_current_speed;        /* '<S2>/Discrete-Time Integrator' */
-extern real_T cc_desired_speed;        /* '<Root>/In1' */
-
 /* Block parameters (auto storage) */
 extern P_CruiseControlSystem_T CruiseControlSystem_P;
 
