@@ -36,7 +36,7 @@ typedef struct tag_RTM_Compare_T RT_MODEL_Compare_T;
 
 /* Parameters (auto storage) */
 struct P_Compare_T_ {
-  real32_T CompareToConstant_const;      /* Mask Parameter: CompareToConstant_const
+  real_T CompareToConstant_const;      /* Mask Parameter: CompareToConstant_const
                                         * Referenced by: '<S2>/Constant'
                                         */
 };
@@ -54,7 +54,7 @@ extern P_Compare_T Compare_P;
 
 /* Model entry point functions */
 void Compare_initialize(void);
-void Compare_step(boolean_T* compare_out, real32_T* compare_in);
+void Compare_step(boolean_T* compare_out, real_T* compare_in);
 void Compare_terminate(void);
 
 /* Real-time Model object */

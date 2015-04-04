@@ -20,7 +20,7 @@ RT_MODEL_Gain_T Gain_M_;
 RT_MODEL_Gain_T *const Gain_M = &Gain_M_;
 
 /* Model step function */
-void Gain_step(real32_T* gain_out, real32_T* gain_in)
+void Gain_step(real_T* gain_out, real_T* gain_in)
 {
   /* Gain: '<S1>/Gain' incorporates:
    *  Inport: '<Root>/In1'

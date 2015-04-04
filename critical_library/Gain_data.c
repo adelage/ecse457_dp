@@ -17,7 +17,7 @@
 
 /* Block parameters (auto storage) */
 P_Gain_T Gain_P = {
-  1.0F                                  /* Computed Parameter: Gain_Gain
+  1.0                                  /* Computed Parameter: Gain_Gain
                                         * Referenced by: '<S1>/Gain'
                                         */
 };

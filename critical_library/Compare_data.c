@@ -17,7 +17,7 @@
 
 /* Block parameters (auto storage) */
 P_Compare_T Compare_P = {
-  3.0F                                 /* Mask Parameter: CompareToConstant_const
+  3.0                                 /* Mask Parameter: CompareToConstant_const
                                         * Referenced by: '<S2>/Constant'
                                         */
 };

@@ -15,7 +15,7 @@
 typedef struct airbag_args {
 	int priority;
 	real_T* deriv_out;			// Derivative stage's output
-	boolean_T* compare_out;		// Airbag stage's output
+	boolean_T* activate_airbag;		// Airbag stage's output
 }airbag_args;
 
 // These are tasks to be fingerprinted
