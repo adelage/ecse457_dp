@@ -33,7 +33,7 @@ void airbag_task(void* args) {
 	airbag_args* a = (airbag_args*)args;
 
 	// Local variables
-	real_T gain_in = a->deriv_out;
+	real_T gain_in = &(a->deriv_out);
 	real_T gain_out;
 	real_T ab_sensor_displacement;
 
