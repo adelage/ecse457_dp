@@ -33,15 +33,15 @@ void airbag_task(void* args) {
 	airbag_args* a = (airbag_args*)args;
 
 	// Local variables
-	real_T *gain_in = (a->deriv_out);
-	real_T *gain_out;
-	real_T *ab_sensor_displacement;
+	real_T gain_in;
+	real_T gain_out;
+	real_T ab_sensor_displacement;
 
 	// Fingerprinting task
 	enable_fprint_task(a->priority);
-	Gain_step(*gain_out, *gain_in);
-	AirbagModel_step(*ab_sensor_displacement, *gain_out);
-	Compare_step(a->activate_airbag, *ab_sensor_displacement);
+	Gain_step(&gain_out, &gain_in);
+	AirbagModel_step(&ab_sensor_displacement, &gain_out);
+	Compare_step(a->activate_airbag, &ab_sensor_displacement);
 	disable_fprint_task(a->priority);
 }
 
