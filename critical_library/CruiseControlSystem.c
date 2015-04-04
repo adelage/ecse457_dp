@@ -27,7 +27,7 @@ RT_MODEL_CruiseControlSystem_T *const CruiseControlSystem_M =
 void CruiseControlSystem_step(real_T* cc_current_speed, real_T* cc_desired_speed)
 {
   /* DiscreteIntegrator: '<S2>/Discrete-Time Integrator' */
-  cc_current_speed = CruiseControlSystem_DW.DiscreteTimeIntegrator_DSTATE;
+  *cc_current_speed = CruiseControlSystem_DW.DiscreteTimeIntegrator_DSTATE;
 
   /* Update for DiscreteIntegrator: '<S2>/Discrete-Time Integrator' incorporates:
    *  DiscreteIntegrator: '<S1>/Discrete-Time Integrator'
@@ -43,7 +43,7 @@ void CruiseControlSystem_step(real_T* cc_current_speed, real_T* cc_desired_speed
       CruiseControlSystem_DW.DiscreteTimeIntegrator_DSTATE_o +
       CruiseControlSystem_P.Ki_Gain *
       CruiseControlSystem_DW.DiscreteTimeIntegrator_DSTATE_o) -
-     CruiseControlSystem_P.damping_Gain * cc_current_speed) *
+     CruiseControlSystem_P.damping_Gain * (*cc_current_speed)) *
     CruiseControlSystem_P.Inertia_Gain *
     CruiseControlSystem_P.DiscreteTimeIntegrator_gainval;
 
@@ -51,8 +51,8 @@ void CruiseControlSystem_step(real_T* cc_current_speed, real_T* cc_desired_speed
    *  Update for Inport: '<Root>/In1'
    *  Sum: '<S1>/Sum'
    */
-  CruiseControlSystem_DW.DiscreteTimeIntegrator_DSTATE_o += (cc_desired_speed -
-    cc_current_speed) * CruiseControlSystem_P.DiscreteTimeIntegrator_gainva_l;
+  CruiseControlSystem_DW.DiscreteTimeIntegrator_DSTATE_o += ((*cc_desired_speed) -
+    (*cc_current_speed)) * CruiseControlSystem_P.DiscreteTimeIntegrator_gainva_l;
 }
 
 /* Model initialize function */

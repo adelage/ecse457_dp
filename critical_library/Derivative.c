@@ -33,12 +33,12 @@ void Derivative_step(real_T* deriv_out, real_T* deriv_in)
    * About '<S2>/TSamp':
    *  y = u * K where K = 1 / ( w * Ts )
    */
-  rtb_TSamp = deriv_in * Derivative_P.TSamp_WtEt;
+  rtb_TSamp = (*deriv_in) * Derivative_P.TSamp_WtEt;
 
   /* Sum: '<S2>/Diff' incorporates:
    *  UnitDelay: '<S2>/UD'
    */
-  deriv_out = rtb_TSamp - Derivative_DW.UD_DSTATE;
+  *deriv_out = rtb_TSamp - Derivative_DW.UD_DSTATE;
 
   /* Update for UnitDelay: '<S2>/UD' */
   Derivative_DW.UD_DSTATE = rtb_TSamp;

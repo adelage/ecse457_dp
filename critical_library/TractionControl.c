@@ -30,13 +30,13 @@ void TractionControl_step(real_T* traction_control_feedback, real_T* current_spe
    *  Inport: '<Root>/Current Speed(Powered Axle)'
    *  Inport: '<Root>/Speed(Unpowered Axle)'
    */
-  rtb_Subtract = current_speed_powered - current_speed_unpowered;
+  rtb_Subtract = (*current_speed_powered) - (*current_speed_unpowered);
 
   /* Product: '<Root>/Product' incorporates:
    *  Constant: '<S1>/Constant'
    *  RelationalOperator: '<S1>/Compare'
    */
-  traction_control_feedback = (real_T)(rtb_Subtract <=
+  *traction_control_feedback = (real_T)(rtb_Subtract <=
     TractionControl_P.CompareToConstant_const) * rtb_Subtract;
 }
 

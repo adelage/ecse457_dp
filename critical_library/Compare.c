@@ -26,7 +26,7 @@ void Compare_step(boolean_T* compare_out, real32_T* compare_in)
    *  Constant: '<S2>/Constant'
    *  Inport: '<Root>/In1'
    */
-  compare_out = (compare_in <= Compare_P.CompareToConstant_const);
+  *compare_out = ((*compare_in) <= Compare_P.CompareToConstant_const);
 }
 
 /* Model initialize function */

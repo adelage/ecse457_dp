@@ -28,7 +28,7 @@ void Sum_step(real32_T* sum_out, real32_T* sum_in1, real32_T* sum_in2)
    *  Inport: '<Root>/In1'
    *  Inport: '<Root>/In2'
    */
-  sum_out = sum_in1 + sum_in2;
+  *sum_out = (*sum_in1) + (*sum_in2);
 }
 
 /* Model initialize function */

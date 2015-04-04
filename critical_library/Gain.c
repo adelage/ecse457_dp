@@ -25,7 +25,7 @@ void Gain_step(real32_T* gain_out, real32_T* gain_in)
   /* Gain: '<S1>/Gain' incorporates:
    *  Inport: '<Root>/In1'
    */
-  gain_out = Gain_P.Gain_Gain * gain_in;
+  *gain_out = Gain_P.Gain_Gain * (*gain_in);
 }
 
 /* Model initialize function */

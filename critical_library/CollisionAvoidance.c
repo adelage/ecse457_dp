@@ -35,7 +35,7 @@ void CollisionAvoidance_step(boolean_T* ca_light_on, real_T* ca_radar_sensor, re
    * About '<S3>/TSamp':
    *  y = u * K where K = 1 / ( w * Ts )
    */
-  rtb_TSamp = ca_radar_sensor * CollisionAvoidance_P.TSamp_WtEt;
+  rtb_TSamp = (*ca_radar_sensor) * CollisionAvoidance_P.TSamp_WtEt;
 
   /* SampleTimeMath: '<S4>/TSamp' incorporates:
    *  Sum: '<S3>/Diff'
@@ -54,8 +54,8 @@ void CollisionAvoidance_step(boolean_T* ca_light_on, real_T* ca_radar_sensor, re
    *  Sum: '<S4>/Diff'
    *  UnitDelay: '<S4>/UD'
    */
-  ca_light_on = ((rtb_TSamp_d - CollisionAvoidance_DW.UD_DSTATE_g) -
-                 ca_acceleration <= CollisionAvoidance_P.Constant_Value);
+  *ca_light_on = ((rtb_TSamp_d - CollisionAvoidance_DW.UD_DSTATE_g) -
+                 (*ca_acceleration) <= CollisionAvoidance_P.Constant_Value);
 
   /* Update for UnitDelay: '<S3>/UD' */
   CollisionAvoidance_DW.UD_DSTATE = rtb_TSamp;

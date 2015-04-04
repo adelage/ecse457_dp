@@ -29,7 +29,7 @@ void TransmissionControl_step(boolean_T* warning_light, real32_T* fluid_sensor)
    *  Constant: '<S1>/Constant'
    *  Inport: '<Root>/Fluid Sensor'
    */
-  warning_light = (fluid_sensor <= TransmissionControl_P.LowFuelSensor_const);
+  *warning_light = ((*fluid_sensor) <= TransmissionControl_P.LowFuelSensor_const);
 }
 
 /* Model initialize function */

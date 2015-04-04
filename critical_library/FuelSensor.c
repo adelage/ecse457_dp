@@ -26,14 +26,14 @@ RT_MODEL_FuelSensor_T *const FuelSensor_M = &FuelSensor_M_;
 void FuelSensor_step(boolean_T* fs_warning_light, real32_T* fs_fuel_level)
 {*
   /* UnitDelay: '<Root>/Light on  ' */
-  fs_warning_light = FuelSensor_DW.Lighton_DSTATE;
+  *fs_warning_light = FuelSensor_DW.Lighton_DSTATE;
 
   /* Update for UnitDelay: '<Root>/Light on  ' incorporates:
    *  Constant: '<S1>/Constant'
    *  Update for Inport: '<Root>/Fuel Level'
    *  RelationalOperator: '<S1>/Compare'
    */
-  FuelSensor_DW.Lighton_DSTATE = (fs_fuel_level <=
+  FuelSensor_DW.Lighton_DSTATE = ((*fs_fuel_level) <=
     FuelSensor_P.LowFuelSensor_const);
 }
 
