@@ -24,7 +24,7 @@ RT_MODEL_FuelSensor_T *const FuelSensor_M = &FuelSensor_M_;
 
 /* Model step function */
 void FuelSensor_step(boolean_T* fs_warning_light, real32_T* fs_fuel_level)
-{*
+{
   /* UnitDelay: '<Root>/Light on  ' */
   *fs_warning_light = FuelSensor_DW.Lighton_DSTATE;
 
