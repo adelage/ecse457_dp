@@ -8,6 +8,7 @@
 #ifndef CRITICAL_H_
 #define CRITICAL_H_
 
+#include "rtwtypes.h"                  /* MathWorks ty*/
 #include "fingerprint.h"
 
 // Type definitions used to pass data to the tasks
