@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'AirbagModel'.
  *
- * Model version                  : 1.7
+ * Model version                  : 1.8
  * Simulink Coder version         : 8.6 (R2014a) 27-Dec-2013
- * C/C++ source code generated on : Mon Mar 23 13:22:44 2015
+ * C/C++ source code generated on : Sat Apr  4 15:17:57 2015
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Generic->32-bit Embedded Processor
@@ -19,7 +19,8 @@
 #include <stddef.h>
 #include <string.h>
 #ifndef AirbagModel_COMMON_INCLUDES_
- #define AirbagModel_COMMON_INCLUDES_
+# define AirbagModel_COMMON_INCLUDES_
+#include "rtwtypes.h"
 #endif                                 /* AirbagModel_COMMON_INCLUDES_ */
 
 /* Macros for accessing real-time model data structure */
@@ -39,11 +40,6 @@ typedef struct {
   real_T DiscreteTimeIntegrator1_DSTATE;/* '<Root>/Discrete-Time Integrator1' */
   real_T DiscreteTimeIntegrator_DSTATE;/* '<Root>/Discrete-Time Integrator' */
 } DW_AirbagModel_T;
-
-/* External outputs (root outports fed by signals with auto storage) */
-typedef struct {
-  real_T SensorDisplacement;           /* '<Root>/Sensor Displacement' */
-} ExtY_AirbagModel_T;
 
 /* Parameters (auto storage) */
 struct P_AirbagModel_T_ {
@@ -76,6 +72,7 @@ struct tag_RTM_AirbagModel_T {
 };
 
 /* Imported (extern) block signals */
+extern real_T ab_sensor_displacement;  /* '<Root>/Discrete-Time Integrator1' */
 extern real_T ab_force;                /* '<Root>/Force' */
 
 /* Block parameters (auto storage) */
@@ -83,9 +80,6 @@ extern P_AirbagModel_T AirbagModel_P;
 
 /* Block states (auto storage) */
 extern DW_AirbagModel_T AirbagModel_DW;
-
-/* External outputs (root outports fed by signals with auto storage) */
-extern ExtY_AirbagModel_T AirbagModel_Y;
 
 /* Model entry point functions */
 extern void AirbagModel_initialize(void);

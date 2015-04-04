@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'AirbagModel'.
  *
- * Model version                  : 1.7
+ * Model version                  : 1.8
  * Simulink Coder version         : 8.6 (R2014a) 27-Dec-2013
- * C/C++ source code generated on : Mon Mar 23 13:22:44 2015
+ * C/C++ source code generated on : Sat Apr  4 15:17:57 2015
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Generic->32-bit Embedded Processor

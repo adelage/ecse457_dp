@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'AirbagModel'.
  *
- * Model version                  : 1.7
+ * Model version                  : 1.8
  * Simulink Coder version         : 8.6 (R2014a) 27-Dec-2013
- * C/C++ source code generated on : Mon Mar 23 13:22:44 2015
+ * C/C++ source code generated on : Sat Apr  4 15:17:57 2015
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Generic->32-bit Embedded Processor
@@ -18,9 +18,6 @@
 /* Block states (auto storage) */
 DW_AirbagModel_T AirbagModel_DW;
 
-/* External outputs (root outports fed by signals with auto storage) */
-ExtY_AirbagModel_T AirbagModel_Y;
-
 /* Real-time model */
 RT_MODEL_AirbagModel_T AirbagModel_M_;
 RT_MODEL_AirbagModel_T *const AirbagModel_M = &AirbagModel_M_;
@@ -28,21 +25,8 @@ RT_MODEL_AirbagModel_T *const AirbagModel_M = &AirbagModel_M_;
 /* Model step function */
 void AirbagModel_step(void)
 {
-  real_T rtb_Sum1;
-
-  /* Outport: '<Root>/Sensor Displacement' incorporates:
-   *  DiscreteIntegrator: '<Root>/Discrete-Time Integrator1'
-   */
-  AirbagModel_Y.SensorDisplacement =
-    AirbagModel_DW.DiscreteTimeIntegrator1_DSTATE;
-
-  /* Sum: '<Root>/Sum1' incorporates:
-   *  DiscreteIntegrator: '<Root>/Discrete-Time Integrator1'
-   *  Gain: '<Root>/Gain'
-   *  Inport: '<Root>/Force'
-   */
-  rtb_Sum1 = ab_force - AirbagModel_P.Gain_Gain *
-    AirbagModel_DW.DiscreteTimeIntegrator1_DSTATE;
+  /* DiscreteIntegrator: '<Root>/Discrete-Time Integrator1' */
+  ab_sensor_displacement = AirbagModel_DW.DiscreteTimeIntegrator1_DSTATE;
 
   /* Update for DiscreteIntegrator: '<Root>/Discrete-Time Integrator1' incorporates:
    *  DiscreteIntegrator: '<Root>/Discrete-Time Integrator'
@@ -53,9 +37,13 @@ void AirbagModel_step(void)
 
   /* Update for DiscreteIntegrator: '<Root>/Discrete-Time Integrator' incorporates:
    *  Gain: '<Root>/Divide mass'
+   *  Gain: '<Root>/Gain'
+   *  Update for Inport: '<Root>/Force'
+   *  Sum: '<Root>/Sum1'
    */
-  AirbagModel_DW.DiscreteTimeIntegrator_DSTATE += AirbagModel_P.Dividemass_Gain *
-    rtb_Sum1 * AirbagModel_P.DiscreteTimeIntegrator_gainval;
+  AirbagModel_DW.DiscreteTimeIntegrator_DSTATE += (ab_force -
+    AirbagModel_P.Gain_Gain * ab_sensor_displacement) *
+    AirbagModel_P.Dividemass_Gain * AirbagModel_P.DiscreteTimeIntegrator_gainval;
 }
 
 /* Model initialize function */
@@ -69,9 +57,6 @@ void AirbagModel_initialize(void)
   /* states (dwork) */
   (void) memset((void *)&AirbagModel_DW, 0,
                 sizeof(DW_AirbagModel_T));
-
-  /* external outputs */
-  AirbagModel_Y.SensorDisplacement = 0.0;
 
   /* InitializeConditions for DiscreteIntegrator: '<Root>/Discrete-Time Integrator1' */
   AirbagModel_DW.DiscreteTimeIntegrator1_DSTATE =
