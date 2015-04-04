@@ -26,7 +26,7 @@ RT_MODEL_AirbagModel_T *const AirbagModel_M = &AirbagModel_M_;
 void AirbagModel_step(real_T *ab_sensor_displacement, real_T *ab_force)
 {
   /* DiscreteIntegrator: '<Root>/Discrete-Time Integrator1' */
-  ab_sensor_displacement = AirbagModel_DW.DiscreteTimeIntegrator1_DSTATE;
+  *ab_sensor_displacement = AirbagModel_DW.DiscreteTimeIntegrator1_DSTATE;
 
   /* Update for DiscreteIntegrator: '<Root>/Discrete-Time Integrator1' incorporates:
    *  DiscreteIntegrator: '<Root>/Discrete-Time Integrator'
@@ -41,8 +41,8 @@ void AirbagModel_step(real_T *ab_sensor_displacement, real_T *ab_force)
    *  Update for Inport: '<Root>/Force'
    *  Sum: '<Root>/Sum1'
    */
-  AirbagModel_DW.DiscreteTimeIntegrator_DSTATE += (ab_force -
-    AirbagModel_P.Gain_Gain * ab_sensor_displacement) *
+  AirbagModel_DW.DiscreteTimeIntegrator_DSTATE += ((*ab_force) -
+    AirbagModel_P.Gain_Gain * (*ab_sensor_displacement)) *
     AirbagModel_P.Dividemass_Gain * AirbagModel_P.DiscreteTimeIntegrator_gainval;
 }
 
