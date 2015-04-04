@@ -13,6 +13,7 @@
 #include "gp.h"
 
 /* Mathworks headers */
+#include "rtwtypes.h"                  /* MathWorks ty*/
 #include "AirbagModel.h"
 #include "CollisionAvoidance.h"
 #include "CruiseControlSystem.h"
@@ -23,7 +24,6 @@
 #include "Sum.h"
 #include "Derivative.h"
 #include "Compare.h"
-#include "rtwtypes.h"                  /* MathWorks ty*/
 
 // Tasks to be fingerprinted
 
@@ -33,7 +33,8 @@ void airbag_task(void* args) {
 	airbag_args* a = (airbag_args*)args;
 
 	// Local variables
-	real32_T* gain_out;
+	real32_T gain_out;
+
 	
 
 	// Fingerprinting task
