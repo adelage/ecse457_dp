@@ -53,9 +53,9 @@ struct tag_RTM_Gain_T {
 extern P_Gain_T Gain_P;
 
 /* Model entry point functions */
-extern void Gain_initialize(void);
-extern void Gain_step(void);
-extern void Gain_terminate(void);
+void Gain_initialize(void);
+void Gain_step(real32_T* gain_out, real32_T* gain_in);
+void Gain_terminate(void);
 
 /* Real-time Model object */
 extern RT_MODEL_Gain_T *const Gain_M;

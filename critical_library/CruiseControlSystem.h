@@ -84,9 +84,9 @@ extern P_CruiseControlSystem_T CruiseControlSystem_P;
 extern DW_CruiseControlSystem_T CruiseControlSystem_DW;
 
 /* Model entry point functions */
-extern void CruiseControlSystem_initialize(void);
-extern void CruiseControlSystem_step(void);
-extern void CruiseControlSystem_terminate(void);
+void CruiseControlSystem_initialize(void);
+void CruiseControlSystem_step(real_T* cc_current_speed, real_T* cc_desired_speed);
+void CruiseControlSystem_terminate(void);
 
 /* Real-time Model object */
 extern RT_MODEL_CruiseControlSystem_T *const CruiseControlSystem_M;

@@ -58,9 +58,9 @@ struct tag_RTM_TractionControl_T {
 extern P_TractionControl_T TractionControl_P;
 
 /* Model entry point functions */
-extern void TractionControl_initialize(void);
-extern void TractionControl_step(void);
-extern void TractionControl_terminate(void);
+void TractionControl_initialize(void);
+void TractionControl_step(real_T* traction_control_feedback, real_T* current_speed_powered, real_T* current_speed_unpowered);
+void TractionControl_terminate(void);
 
 /* Real-time Model object */
 extern RT_MODEL_TractionControl_T *const TractionControl_M;

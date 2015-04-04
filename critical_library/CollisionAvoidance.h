@@ -74,9 +74,9 @@ extern P_CollisionAvoidance_T CollisionAvoidance_P;
 extern DW_CollisionAvoidance_T CollisionAvoidance_DW;
 
 /* Model entry point functions */
-extern void CollisionAvoidance_initialize(void);
-extern void CollisionAvoidance_step(void);
-extern void CollisionAvoidance_terminate(void);
+void CollisionAvoidance_initialize(void);
+void CollisionAvoidance_step(boolean_T* ca_light_on, real_T* ca_radar_sensor, real_T* ca_acceleration);
+void CollisionAvoidance_terminate(void);
 
 /* Real-time Model object */
 extern RT_MODEL_CollisionAvoidance_T *const CollisionAvoidance_M;

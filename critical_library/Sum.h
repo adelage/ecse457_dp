@@ -44,9 +44,9 @@ struct tag_RTM_Sum_T {
 };
 
 /* Model entry point functions */
-extern void Sum_initialize(void);
-extern void Sum_step(void);
-extern void Sum_terminate(void);
+void Sum_initialize(void);
+void Sum_step(real32_T* sum_out, real32_T* sum_in1, real32_T* sum_in2);
+void Sum_terminate(void);
 
 /* Real-time Model object */
 extern RT_MODEL_Sum_T *const Sum_M;

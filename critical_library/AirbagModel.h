@@ -71,10 +71,6 @@ struct tag_RTM_AirbagModel_T {
   const char_T * volatile errorStatus;
 };
 
-/* Imported (extern) block signals */
-extern real_T ab_sensor_displacement;  /* '<Root>/Discrete-Time Integrator1' */
-extern real_T ab_force;                /* '<Root>/Force' */
-
 /* Block parameters (auto storage) */
 extern P_AirbagModel_T AirbagModel_P;
 
@@ -82,9 +78,9 @@ extern P_AirbagModel_T AirbagModel_P;
 extern DW_AirbagModel_T AirbagModel_DW;
 
 /* Model entry point functions */
-extern void AirbagModel_initialize(void);
-extern void AirbagModel_step(void);
-extern void AirbagModel_terminate(void);
+void AirbagModel_initialize(void);
+void AirbagModel_step(real_T* ab_sensor_displacement, real_T* ab_force);
+void AirbagModel_terminate(void);
 
 /* Real-time Model object */
 extern RT_MODEL_AirbagModel_T *const AirbagModel_M;

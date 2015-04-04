@@ -58,9 +58,9 @@ struct tag_RTM_TransmissionControl_T {
 extern P_TransmissionControl_T TransmissionControl_P;
 
 /* Model entry point functions */
-extern void TransmissionControl_initialize(void);
-extern void TransmissionControl_step(void);
-extern void TransmissionControl_terminate(void);
+void TransmissionControl_initialize(void);
+void TransmissionControl_step(boolean_T* warning_light, real32_T* fluid_sensor);
+void TransmissionControl_terminate(void);
 
 /* Real-time Model object */
 extern RT_MODEL_TransmissionControl_T *const TransmissionControl_M;

@@ -64,9 +64,9 @@ extern P_FuelSensor_T FuelSensor_P;
 extern DW_FuelSensor_T FuelSensor_DW;
 
 /* Model entry point functions */
-extern void FuelSensor_initialize(void);
-extern void FuelSensor_step(void);
-extern void FuelSensor_terminate(void);
+void FuelSensor_initialize(void);
+void FuelSensor_step(boolean_T* fs_warning_light, real32_T* fs_fuel_level);
+void FuelSensor_terminate(void);
 
 /* Real-time Model object */
 extern RT_MODEL_FuelSensor_T *const FuelSensor_M;

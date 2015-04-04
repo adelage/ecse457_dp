@@ -20,7 +20,7 @@ RT_MODEL_Compare_T Compare_M_;
 RT_MODEL_Compare_T *const Compare_M = &Compare_M_;
 
 /* Model step function */
-void Compare_step(boolean_T* compare_out, real_T* compare_in)
+void Compare_step(boolean_T* compare_out, real32_T* compare_in)
 {
   /* RelationalOperator: '<S2>/Compare' incorporates:
    *  Constant: '<S2>/Constant'

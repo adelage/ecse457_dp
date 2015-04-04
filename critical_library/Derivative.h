@@ -65,9 +65,9 @@ extern P_Derivative_T Derivative_P;
 extern DW_Derivative_T Derivative_DW;
 
 /* Model entry point functions */
-extern void Derivative_initialize(void);
-extern void Derivative_step(void);
-extern void Derivative_terminate(void);
+void Derivative_initialize(void);
+void Derivative_step(real_T* deriv_out, real_T* deriv_in);
+void Derivative_terminate(void);
 
 /* Real-time Model object */
 extern RT_MODEL_Derivative_T *const Derivative_M;
