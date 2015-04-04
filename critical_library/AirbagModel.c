@@ -23,7 +23,7 @@ RT_MODEL_AirbagModel_T AirbagModel_M_;
 RT_MODEL_AirbagModel_T *const AirbagModel_M = &AirbagModel_M_;
 
 /* Model step function */
-void AirbagModel_step(real_T* ab_sensor_displacement, real_T* ab_force)
+void AirbagModel_step(real_T *ab_sensor_displacement, real_T *ab_force)
 {
   /* DiscreteIntegrator: '<Root>/Discrete-Time Integrator1' */
   ab_sensor_displacement = AirbagModel_DW.DiscreteTimeIntegrator1_DSTATE;

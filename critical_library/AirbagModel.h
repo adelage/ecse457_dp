@@ -79,7 +79,7 @@ extern DW_AirbagModel_T AirbagModel_DW;
 
 /* Model entry point functions */
 void AirbagModel_initialize(void);
-void AirbagModel_step(real_T* ab_sensor_displacement, real_T* ab_force);
+void AirbagModel_step(real_T *ab_sensor_displacement, real_T *ab_force);
 void AirbagModel_terminate(void);
 
 /* Real-time Model object */
