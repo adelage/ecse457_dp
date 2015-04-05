@@ -88,7 +88,7 @@ void traction_control_task(void* args) {
 	disable_fprint_task(a->priority);
 
 	// Pass output to subsequent stages (DOES THIS HAVE TO BE FINGERPRINTED?)
-	s_data->sum_in2 = -(tc_data->traction_control_feedback); // Note that input is negative for negative feedback effect
+	s_data->sum_in2 = tc_data->traction_control_feedback; // Note that input is negative for negative feedback effect
 }
 
 // Derivative task, calls Derivative.c functions
