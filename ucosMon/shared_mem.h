@@ -8,29 +8,25 @@
 #ifndef SHARED_MEM_H_
 #define SHARED_MEM_H_
 
-// Definitions
- #define NUM_CORES 2
-
-
 typedef struct CriticalFunctionPointers{
 	//Priority of the critical task
-	unsigned int priority[NUM_CORES];
+	unsigned int priority[8];
 	//The pointer to the function code
-	void *task[NUM_CORES];
+	void *task[8];
 	//Arguments to the function
-	void *args[NUM_CORES];
+	void *args[8];
 	//To pass timing results back from the cores to the monitor
-	alt_u64  core_time[NUM_CORES];
+	alt_u64  core_time[8];
 	//Monitor signals to cores to begin initializing in main
 	int init_complete;
 	//Cores signal that they are done
-	int core_ready[NUM_CORES];
+	int core_ready[8];
 	//Cores signal to each other that they are ready
-	int checkout[NUM_CORES];
+	int checkout[8];
 	//Cores find out who their partner is
-	int partner[NUM_CORES];
+	int partner[8];
 	//blocksize for fingerprinting
-	int blocksize[NUM_CORES];
+	int blocksize[8];
 
 }CriticalFunctionPointers;
 
