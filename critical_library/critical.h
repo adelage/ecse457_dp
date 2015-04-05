@@ -21,7 +21,7 @@ typedef struct collision_avoidance_data {
 	real_T* ca_radar_sensor;
 	real_T* ca_acceleration;
 	boolean_T* ca_light_on;
-}collision_avoidance;
+}collision_avoidance_data;
 
 typedef struct cruise_control_data {
 	real_T* cc_desired_speed;
