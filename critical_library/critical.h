@@ -43,7 +43,7 @@ typedef struct sum_data {
 	real_T* sum_in1;
 	real_T* sum_in2;
 	real_T* sum_out;
-}derivative_data;
+}sum_data;
 
 // Type definitions used to pass data to the tasks
 typedef struct airbag_args {
