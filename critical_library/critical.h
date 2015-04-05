@@ -48,38 +48,38 @@ typedef struct sum_data {
 // Type definitions used to pass data to the tasks
 typedef struct airbag_args {
 	int priority;
-	airbag_data* airbag_data;
+	airbag_data *airbag_data;
 }airbag_args;
 
 typedef struct collision_avoidance_args {
 	int priority;
-	collision_avoidance_data* collision_avoidance_data;
+	collision_avoidance_data *collision_avoidance_data;
 }collision_avoidance_args;
 
 typedef struct cruise_control_args {
 	int priority;
-	cruise_control_data* cruise_control_data;
-	derivative_data* derivative_data;
-	traction_control_data* traction_control_data;
+	cruise_control_data *cruise_control_data;
+	derivative_data *derivative_data;
+	traction_control_data *traction_control_data;
 }cruise_control_args;
 
 typedef struct traction_control_args {
 	int priority;
-	traction_control_data* traction_control_data;
-	sum_data* sum_data;
+	traction_control_data *traction_control_data;
+	sum_data *sum_data;
 }traction_control_args;
 
 typedef struct derivative_args {
 	int priority;
-	derivative_data* derivative_data;
-	airbag_data* airbag_data;
-	collision_avoidance_data* collision_avoidance_data;
+	derivative_data *derivative_data;
+	airbag_data *airbag_data;
+	collision_avoidance_data *collision_avoidance_data;
 }derivative_args;
 
 typedef struct sum_args {
 	int priority;
-	sum_data* sum_data;
-	cruise_control_data* cruise_control_data;
+	sum_data *sum_data;
+	cruise_control_data *cruise_control_data;
 }sum_args;
 
 // These are tasks to be fingerprinted
