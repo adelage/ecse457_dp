@@ -31,7 +31,7 @@
 void airbag_task(void* args) {
 	// Get data from input arguments
 	airbag_args* a = (airbag_args*)args;
-	airbag_data* ab_data = a->airbag_data*;
+	airbag_data** ab_data = a->airbag_data;
 
 	// Local (intermediate) variables
 	real_T gain_out;
