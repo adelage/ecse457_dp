@@ -11,6 +11,40 @@
 #include "rtwtypes.h"                  /* MathWorks ty*/
 #include "fingerprint.h"
 
+// Type definitions that hold the data for each stage in the system
+typedef struct airbag_data {
+	real_T* gain_in;
+	boolean_T* activate_airbag;
+}airbag_data;
+
+typedef struct collision_avoidance_data {
+	real_T* ca_radar_sensor;
+	real_T* ca_acceleration;
+	boolean_T* ca_light_on;
+}collision_avoidance;
+
+typedef struct cruise_control_data {
+	real_T* cc_desired_speed;
+	real_T* cc_current_speed;
+}cruise_control_data;
+
+typedef struct traction_control_data {
+	real_T* current_speed_powered;
+	real_T* current_speed_unpowered;
+	real_T* traction_control_feedback;
+}traction_control_data;
+
+typedef struct derivative_data {
+	real_T* deriv_in;
+	real_T* deriv_out;
+}derivative_data;
+
+typedef struct sum_data {
+	real_T* sum_in1;
+	real_T* sum_in2;
+	real_T* sum_out;
+}derivative_data;
+
 // Type definitions used to pass data to the tasks
 typedef struct airbag_args {
 	int priority;
@@ -47,40 +81,6 @@ typedef struct sum_args {
 	sum_data* sum_data;
 	cruise_control_data* cruise_control_data;
 }sum_args;
-
-// Type definitions that hold the data for each stage in the system
-typedef struct airbag_data {
-	real_T* gain_in;
-	boolean_T* activate_airbag;
-}airbag_data;
-
-typedef struct collision_avoidance_data {
-	real_T* ca_radar_sensor;
-	real_T* ca_acceleration;
-	boolean_T* ca_light_on;
-}collision_avoidance;
-
-typedef struct cruise_control_data {
-	real_T* cc_desired_speed;
-	real_T* cc_current_speed;
-}cruise_control_data;
-
-typedef struct traction_control_data {
-	real_T* current_speed_powered;
-	real_T* current_speed_unpowered;
-	real_T* traction_control_feedback;
-}traction_control_data;
-
-typedef struct derivative_data {
-	real_T* deriv_in;
-	real_T* deriv_out;
-}derivative_data;
-
-typedef struct sum_data {
-	real_T* sum_in1;
-	real_T* sum_in2;
-	real_T* sum_out;
-}derivative_data;
 
 // These are tasks to be fingerprinted
 void airbag_task(void* args);
