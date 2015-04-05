@@ -59,7 +59,7 @@ typedef struct collision_avoidance_args {
 typedef struct cruise_control_args {
 	int priority;
 	cruise_control_data* cruise_control_data;
-	derivative_args* derivative_args;
+	derivative_data* derivative_data;
 	traction_control_data* traction_control_data;
 }cruise_control_args;
 
@@ -71,7 +71,7 @@ typedef struct traction_control_args {
 
 typedef struct derivative_args {
 	int priority;
-	derivative_args* derivative_args;
+	derivative_data* derivative_data;
 	airbag_data* airbag_data;
 	collision_avoidance_data* collision_avoidance_data;
 }derivative_args;
