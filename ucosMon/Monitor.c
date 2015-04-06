@@ -359,19 +359,10 @@ int main(void) {
 
 	mutex = altera_avalon_mutex_open(MUTEX_0_NAME);	//Initialize the hardware mutex
 	altera_avalon_mutex_lock(mutex, 1);
-		{
-			//set the initial values for key variables
-			cp->critical = critical_task;
-			cp->preempt = preempt_task;
-			//Set the global pointer
-			cp->gpm = get_gp();
-			//Set init complete.
-			//This make sure that none of the other cores proceed
-			//before this is asserted.
-			//All code that must execute or variables that must be set
-			//before other cores start up should be done before this point
-			cp->init_complete = 1;
-		}
+	{
+		OSTimeSet(0);
+		cp->init_complete = 1;
+	}
 	altera_avalon_mutex_unlock(mutex);
 
 
