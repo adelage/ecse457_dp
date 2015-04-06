@@ -124,7 +124,7 @@ void schedule_task(void* pdata){
 		s_args.cruise_control_data = &cc_data;
 
 		// Run Sum function
-		sum_task(&sum_args);
+		sum_task(&s_args);
 
 		// Print time
 		x = OSTimeGet();
