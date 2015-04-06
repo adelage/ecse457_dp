@@ -105,23 +105,44 @@ void schedule_task(void* pdata){
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
 		int i;
+		int x = OSTimeGet();
+		printf("%d", x);
 
-		//Acquire the mutex
-			altera_avalon_mutex_lock(mutex, 1);
-			{
-				//set the function address
-				cp->preempt = preempt_task;
-				//set the fprint id
-				cp->task_id0 = (5);
-				cp->task_id1 = (5);
-				//Set interrupt signals for the 2 cores
-				*isr_1_ptr = 1;
-				*isr_0_ptr = 1;
+		// Initialize critical function arguments
+		sum_data s_data;
+		s_data.sum_in1 = 2;
+		s_data.sum_in2 = 1;
+		s_data.sum_out = 0;
 
-			}
-			altera_avalon_mutex_unlock(mutex);
-			//Wait a minute before trying again
-			OSTimeDlyHMSM(0, 1, 0, 0);
+		cruise_control_data cc_data;
+		cc_data.cc_desired_speed = 0;
+		cc_data.cc_current_speed = 0;
+
+		sum_args s_args;
+		s_args.priority = CRITICAL_TASK_PRIORITY;
+		s_args.sum_data = s_data;
+		s_args.cruise_control_data = cc_data;
+
+		// Run Sum function
+		sum_task(&sum_args);
+
+		// Print time
+		x = OSTimeGet();
+		printf("%d", x);
+
+		// //Acquire the mutex and set cores 1 and 2 to execute the first task
+		// altera_avalon_mutex_lock(mutex, 1);
+		// {
+		// 	for(i = 0; i < 2; i++){
+		// 		cp->task[i] = basicmath_test;
+		// 		cp->priority[i] = 3;
+		// 		cp->blocksize[i] = 0xfff;
+		// 		cp->args[i] = &args[0];
+		// 	}
+		// }
+		// altera_avalon_mutex_unlock(mutex);
+		//Wait a minute before trying again
+		OSTimeDlyHMSM(0, 0, 10, 0);
 
 
 

@@ -17,7 +17,7 @@
 
 /* Block parameters (auto storage) */
 P_FuelSensor_T FuelSensor_P = {
-  3.0F,                                /* Mask Parameter: LowFuelSensor_const
+  3.0,                                /* Mask Parameter: LowFuelSensor_const
                                         * Referenced by: '<S1>/Constant'
                                         */
   0                                    /* Computed Parameter: Lighton_InitialCondition

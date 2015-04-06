@@ -19,7 +19,7 @@
 
 /* Block parameters (auto storage) */
 P_TransmissionControl_T TransmissionControl_P = {
-  3.0F                                 /* Mask Parameter: LowFuelSensor_const
+  3.0                                  /* Mask Parameter: LowFuelSensor_const
                                         * Referenced by: '<S1>/Constant'
                                         */
 };

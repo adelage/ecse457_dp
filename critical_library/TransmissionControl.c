@@ -23,7 +23,7 @@ RT_MODEL_TransmissionControl_T *const TransmissionControl_M =
   &TransmissionControl_M_;
 
 /* Model step function */
-void TransmissionControl_step(boolean_T* warning_light, real32_T* fluid_sensor)
+void TransmissionControl_step(boolean_T* warning_light, real_T* fluid_sensor)
 {
   /* RelationalOperator: '<S1>/Compare' incorporates:
    *  Constant: '<S1>/Constant'

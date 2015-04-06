@@ -41,7 +41,7 @@ typedef struct tag_RTM_TransmissionControl_T RT_MODEL_TransmissionControl_T;
 
 /* Parameters (auto storage) */
 struct P_TransmissionControl_T_ {
-  real32_T LowFuelSensor_const;        /* Mask Parameter: LowFuelSensor_const
+  real_T LowFuelSensor_const;        /* Mask Parameter: LowFuelSensor_const
                                         * Referenced by: '<S1>/Constant'
                                         */
 };
@@ -59,7 +59,7 @@ extern P_TransmissionControl_T TransmissionControl_P;
 
 /* Model entry point functions */
 void TransmissionControl_initialize(void);
-void TransmissionControl_step(boolean_T* warning_light, real32_T* fluid_sensor);
+void TransmissionControl_step(boolean_T* warning_light, real_T* fluid_sensor);
 void TransmissionControl_terminate(void);
 
 /* Real-time Model object */

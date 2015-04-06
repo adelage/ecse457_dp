@@ -41,7 +41,7 @@ typedef struct {
 
 /* Parameters (auto storage) */
 struct P_FuelSensor_T_ {
-  real32_T LowFuelSensor_const;        /* Mask Parameter: LowFuelSensor_const
+  real_T LowFuelSensor_const;          /* Mask Parameter: LowFuelSensor_const
                                         * Referenced by: '<S1>/Constant'
                                         */
   boolean_T Lighton_InitialCondition;  /* Computed Parameter: Lighton_InitialCondition
@@ -65,7 +65,7 @@ extern DW_FuelSensor_T FuelSensor_DW;
 
 /* Model entry point functions */
 void FuelSensor_initialize(void);
-void FuelSensor_step(boolean_T* fs_warning_light, real32_T* fs_fuel_level);
+void FuelSensor_step(boolean_T* fs_warning_light, real_T* fs_fuel_level);
 void FuelSensor_terminate(void);
 
 /* Real-time Model object */

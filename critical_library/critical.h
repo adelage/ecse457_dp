@@ -83,12 +83,12 @@ typedef struct sum_args {
 }sum_args;
 
 // These are tasks to be fingerprinted
-void airbag_task(void* args);
-void collision_avoidance_task(void* args);
-void cruise_control_task(void* args);
-void traction_control_task(void* args);
-void derivative_task(void* args);
-void sum_task(void* args);
+extern void airbag_task(void* args);
+extern void collision_avoidance_task(void* args);
+extern void cruise_control_task(void* args);
+extern void traction_control_task(void* args);
+extern void derivative_task(void* args);
+extern void sum_task(void* args);
 
 // These two tasks are used to save the values of callee saved
 // registers onto the stack before fingerprinting and restore them
