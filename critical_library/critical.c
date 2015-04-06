@@ -39,9 +39,9 @@ void airbag_task(void* args) {
 
 	// Fingerprinting task
 	enable_fprint_task(a->priority);
-	Gain_step(&gain_out, *(ab_data->gain_in);
+	Gain_step(&gain_out, (real_T*)ab_data->gain_in);
 	AirbagModel_step(&ab_sensor_displacement, &gain_out);
-	Compare_step(*(ab_data->activate_airbag), &ab_sensor_displacement);
+	Compare_step((real_T*)ab_data->activate_airbag, &ab_sensor_displacement);
 	disable_fprint_task(a->priority);
 }
 
