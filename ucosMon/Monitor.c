@@ -82,7 +82,7 @@ int status;
 /*
  * IO
  */
-
+CriticalFunctionPointers cpg;
 INT8U err;
 
 
@@ -347,7 +347,6 @@ void dma(void){
 int main(void) {
 
 	printf("Hello from Nios II!\n");
-	CriticalFunctionPointers cpg;
 	int i,j;
 	init_collision_isr();
 	CriticalFunctionPointers* cp =
@@ -415,12 +414,14 @@ int main(void) {
 	while((p0 != 1) || (p1 != 1)){
 		altera_avalon_mutex_lock(mutex, 1);
 		{
-			memcpy(&cpg,(void*)SHARED_MEMORY_BASE,sizeof(CriticalFunctionPointers));
-			p0 = cpg.core0_ready;
-			p1 = cpg.core1_ready;
+			memcpy(&cpg, (void*)SHARED_MEMORY_BASE, sizeof(CriticalFunctionPointers));
+			p0 = cpg.core_ready[0];
+			p1 = cpg.core_ready[1];
 		}
 		altera_avalon_mutex_unlock(mutex);
 	}
+	cpg.core_ready[0] = 0;
+	cpg.core_ready[1] = 0;
 
 	//Start up the tasks and OS
 	int arg_5 = CRITICAL_TASK_PRIORITY;
