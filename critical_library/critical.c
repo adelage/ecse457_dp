@@ -53,7 +53,7 @@ void collision_avoidance_task(void* args) {
 
 	// Fingerprinting task
 	enable_fprint_task(a->priority);
-	CollisionAvoidance_step(ca_data->ca_light_on, ca_data->ca_radar_sensor, ca_data->ca_acceleration);
+	CollisionAvoidance_step(&(ca_data->ca_light_on), &(ca_data->ca_radar_sensor), &(ca_data->ca_acceleration));
 	disable_fprint_task(a->priority);
 }
 
@@ -67,7 +67,7 @@ void cruise_control_task(void* args) {
 
 	// Fingerprinting task
 	enable_fprint_task(a->priority);
-	CruiseControlSystem_step(cc_data->cc_current_speed, cc_data->cc_desired_speed);
+	CruiseControlSystem_step(&(cc_data->cc_current_speed), &(cc_data->cc_desired_speed));
 	disable_fprint_task(a->priority);
 
 	// Pass output to subsequent stages (DOES THIS HAVE TO BE FINGERPRINTED?)
@@ -84,7 +84,8 @@ void traction_control_task(void* args) {
 
 	// Fingerprinting task
 	enable_fprint_task(a->priority);
-	TractionControl_step(tc_data->traction_control_feedback, tc_data->current_speed_powered, tc_data->current_speed_unpowered);
+	TractionControl_step(&(tc_data->traction_control_feedback), &(tc_data->current_speed_powered), 
+						 &(tc_data->current_speed_unpowered));
 	disable_fprint_task(a->priority);
 
 	// Pass output to subsequent stages (DOES THIS HAVE TO BE FINGERPRINTED?)
@@ -101,7 +102,7 @@ void derivative_task(void* args) {
 
 	// Fingerprinting task
 	enable_fprint_task(a->priority);
-	Derivative_step(d_data->deriv_out, d_data->deriv_in);
+	Derivative_step(&(d_data->deriv_out), &(d_data->deriv_in));
 	disable_fprint_task(a->priority);
 
 	// Pass output to subsequent stages (DOES THIS HAVE TO BE FINGERPRINTED?)
@@ -118,7 +119,7 @@ void sum_task(void* args) {
 
 	// Fingerprinting task
 	enable_fprint_task(a->priority);
-	Sum_step(s_data->sum_out, s_data->sum_in1, s_data->sum_in2);
+	Sum_step(&(s_data->sum_out), &(s_data->sum_in1), &(s_data->sum_in2));
 	disable_fprint_task(a->priority);
 
 	// Pass output to subsequent stages (DOES THIS HAVE TO BE FINGERPRINTED?)
