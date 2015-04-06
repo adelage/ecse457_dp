@@ -13,36 +13,36 @@
 
 // Type definitions that hold the data for each stage in the system
 typedef struct airbag_data {
-	real_T* gain_in;
-	boolean_T* activate_airbag;
+	real_T gain_in;
+	boolean_T activate_airbag;
 }airbag_data;
 
 typedef struct collision_avoidance_data {
-	real_T* ca_radar_sensor;
-	real_T* ca_acceleration;
-	boolean_T* ca_light_on;
+	real_T ca_radar_sensor;
+	real_T ca_acceleration;
+	boolean_T ca_light_on;
 }collision_avoidance_data;
 
 typedef struct cruise_control_data {
-	real_T* cc_desired_speed;
-	real_T* cc_current_speed;
+	real_T cc_desired_speed;
+	real_T cc_current_speed;
 }cruise_control_data;
 
 typedef struct traction_control_data {
-	real_T* current_speed_powered;
-	real_T* current_speed_unpowered;
-	real_T* traction_control_feedback;
+	real_T current_speed_powered;
+	real_T current_speed_unpowered;
+	real_T traction_control_feedback;
 }traction_control_data;
 
 typedef struct derivative_data {
-	real_T* deriv_in;
-	real_T* deriv_out;
+	real_T deriv_in;
+	real_T deriv_out;
 }derivative_data;
 
 typedef struct sum_data {
-	real_T* sum_in1;
-	real_T* sum_in2;
-	real_T* sum_out;
+	real_T sum_in1;
+	real_T sum_in2;
+	real_T sum_out;
 }sum_data;
 
 // Type definitions used to pass data to the tasks
