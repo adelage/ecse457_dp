@@ -8,39 +8,27 @@
 #ifndef SHARED_MEM_H_
 #define SHARED_MEM_H_
 
+ #define NUM_CORES 2
 
 typedef struct CriticalFunctionPointers{
-	void* gpm;
-	void* critical;
-	void* preempt;
-	unsigned short task_id0;
-	unsigned short task_id1;
-	unsigned short task_id2;
-	unsigned short task_id3;
-	unsigned short task_id4;
-	unsigned short task_id5;
-	unsigned short task_id6;
-	unsigned short task_id7;
-	unsigned int init_complete;
-	unsigned int checkout0;
-	unsigned int checkout1;
-	unsigned int checkout2;
-	unsigned int checkout3;
-	unsigned int checkout4;
-	unsigned int checkout5;
-	unsigned int checkout6;
-	unsigned int checkout7;
-	unsigned int checkin0;
-	unsigned int checkin1;
-	unsigned int core0_ready;
-	unsigned int core1_ready;
-	unsigned int core2_ready;
-	unsigned int core3_ready;
-	unsigned int core4_ready;
-	unsigned int core5_ready;
-	unsigned int core6_ready;
-	unsigned int core7_ready;
-	alt_u64  core_time[8];
+	//Priority of the critical task
+	unsigned int priority[NUM_CORES];
+	//The pointer to the function code
+	void *task[NUM_CORES];
+	//Arguments to the function
+	void *args[NUM_CORES];
+	//To pass timing results back from the cores to the monitor
+	alt_u64  core_time[NUM_CORES];
+	//Monitor signals to cores to begin initializing in main
+	int init_complete;
+	//Cores signal that they are done
+	int core_ready[NUM_CORES];
+	//Cores signal to each other that they are ready
+	int checkout[NUM_CORES];
+	//Cores find out who their partner is
+	int partner[NUM_CORES];
+	//blocksize for fingerprinting
+	int blocksize[NUM_CORES];
 
 }CriticalFunctionPointers;
 

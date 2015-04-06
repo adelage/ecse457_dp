@@ -271,7 +271,7 @@ static volatile int rx_done = 0;
 
 static void done_dma (void* handle, void* data)
 {
-rx_done++;
+	rx_done++;
 }
 
 void dma(void){
@@ -414,7 +414,8 @@ int main(void) {
 	while((p0 != 1) || (p1 != 1)){
 		altera_avalon_mutex_lock(mutex, 1);
 		{
-			memcpy(&cpg, (void*)SHARED_MEMORY_BASE, sizeof(CriticalFunctionPointers));
+			memcpy(&cpg, (void*) SHARED_MEMORY_BASE,
+					sizeof(CriticalFunctionPointers));
 			p0 = cpg.core_ready[0];
 			p1 = cpg.core_ready[1];
 		}

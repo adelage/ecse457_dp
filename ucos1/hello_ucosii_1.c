@@ -53,12 +53,12 @@ int count = 0;
  * using the CriticalFunctionPointers data structure. The task is then executed
  */
 static void handle_cpu1_interrupt(void* context) {
-	unsigned short task_id;
+	unsigned short priority;
 	altera_avalon_mutex_lock(mutex, 1);
 	{
 
 		CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
-		task_id = cp->task_id1;
+		priority = cp->priority[1];
 		*isr_1_ptr = 0;
 
 	}
@@ -114,23 +114,17 @@ void preemption_task(void* pdata){
 			altera_avalon_mutex_lock(mutex, 1); //Acquire the hardware mutex
 			{
 				if(first == 0){
-					cp->checkout1 = 1;
+					cp->checkout[1] = 1;
 					first = 1;
 				}
-				if( cp->checkout0 == 1){
-					cp->checkout0 = 0;
+				if( cp->checkout[0] == 1){
+					cp->checkout[0] = 0;
 					done = 1;
 				}
 
 			}
 			altera_avalon_mutex_unlock(mutex);
 		}
-
-		//measure the execution time on each core
-		if (alt_timestamp_start() < 0)
-			{
-			printf ("No timestamp device available\n");
-			}
 
 		//Context switch is necessary to clear the callee saved registers
 		long registers[8];
@@ -163,8 +157,6 @@ void init_tlb(){
 
 }
 
-
-
 /*
  * Main
  */
@@ -175,22 +167,12 @@ int main(void) {
 	enable_tlb();
 	void (*pt)(int);
 	printf("Hello from Nios II!\n");
-		mutex = altera_avalon_mutex_open(MUTEX_0_NAME);			//Initialize the hardware mutex
-		mbox = OSSemCreate(0);				//Initialize the message box
-		CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
+	mutex = altera_avalon_mutex_open(MUTEX_0_NAME);			//Initialize the hardware mutex
+	mbox = OSSemCreate(0);				//Initialize the message box
+	CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
 
-		//Wait for monitor to be done initialization of shared variables before retrieving their values
-		while(cp->init_complete == 0);
-			altera_avalon_mutex_lock(mutex, 1);				//Acquire the hardware mutex
-			{
-
-				//retrieve shared values from monitor
-				ct = cp->critical;
-				pt = cp->preempt;
-			}
-			altera_avalon_mutex_unlock(mutex);				//Memory
-
-
+	//Wait for monitor to be done initialization of shared variables before retrieving their values
+	while(cp->init_complete == 0);
 	init_cpu1_isr();										//Initialize the ISR
 
 	//Set default block size for fingerprinting
@@ -207,7 +189,7 @@ int main(void) {
 	//Signal that the core has finished initializing
 	altera_avalon_mutex_lock(mutex, 1);				//Acquire the hardware mutex
 	{
-		cp->core1_ready = 1;
+		cp->core_ready[1] = 1;
 	}
 	altera_avalon_mutex_unlock(mutex);				//Memory
 	//Start OS
