@@ -31,57 +31,48 @@
 
 alt_mutex_dev* mutex;									//hardware mutex pointer
 void (*ct)(int);
+
 int *isr_0_ptr = (int *) PROCESSOR0_0_CPU_IRQ_0_BASE;	//Pointer to IRQ Register
-								//(CPU0 -> CPU1)
 
 #define   TASK_STACKSIZE       1024						//Stack size for all tasks
 
-//
-//OS_STK preempt_task_stk_3[TASK_STACKSIZE] __attribute__ ((section (".critical")));
-//OS_STK preempt_task_stk_2[TASK_STACKSIZE] __attribute__ ((section (".critical")));
-//OS_STK preempt_task_stk[TASK_STACKSIZE] __attribute__ ((section (".critical")));
+
 OS_STK critical_task_stk[TASK_STACKSIZE] __attribute__ ((section (".critical")));
-
-
 
 /* Definition of Task Priorities */
 
-#define PREEMPT_TASK_PRIORITY_2		2
-#define PREEMPT_TASK_PRIORITY_3		3
-#define PREEMPT_TASK_PRIORITY		4
-#define CRITICAL_TASK_PRIORITY      5
-#define TASK2_PRIORITY      		25
 
-OS_EVENT* mbox;											//Message box to initiate
-OS_EVENT* preempt_sem;														//critical task
-OS_EVENT* preempt_sem_2;
-OS_EVENT* preempt_sem_3;
+#define CRITICAL_TASK_PRIORITY      5
+
+OS_EVENT* mbox;
 /*
  * Interrupt Handler and Initializer
  */
 int count = 0;
-static void handle_cpu1_interrupt(void* context) {
-	unsigned short task_id;
+
+/*
+ * If CPU0 interrupt goes off, we assume that it has been sent
+ * by the monitor for now and that a task must be executed.
+ * The identity of the task is retrieved from the shared_memory
+ * using the CriticalFunctionPointers data structure. The task is then executed
+ */
+static void handle_cpu0_interrupt(void* context) {
+	unsigned short priority;
 	altera_avalon_mutex_lock(mutex, 1);
 	{
 
 		CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
-		task_id = cp->task_id0;
-		*isr_0_ptr = 0;
+		priority = cp->priority[0];
+		*isr_1_ptr = 0;
 
 	}
 	altera_avalon_mutex_unlock(mutex);
 	if(task_id == CRITICAL_TASK_PRIORITY)
 		OSSemPost(mbox);
-	else if(task_id == PREEMPT_TASK_PRIORITY)
-		OSSemPost(preempt_sem);
-	else if(task_id == PREEMPT_TASK_PRIORITY_2)
-		OSSemPost(preempt_sem_2);
-	else if(task_id == PREEMPT_TASK_PRIORITY_3)
-		OSSemPost(preempt_sem_3);
+
 }
 
-static void init_cpu1_isr(void) {
+static void init_cpu0_isr(void) {
 	alt_ic_isr_register(PROCESSOR0_0_CPU_IRQ_0_IRQ_INTERRUPT_CONTROLLER_ID,
 			PROCESSOR0_0_CPU_IRQ_0_IRQ, handle_cpu1_interrupt, (void*) NULL,
 			(void*) NULL);
@@ -96,54 +87,58 @@ static void init_cpu1_isr(void) {
 INT8U err;
 void preemption_task(void* pdata){
 	int* p = pdata;
+
+	//Some ugly pointer formatting to make sure there are no gp related problems
+	//when calling the task
 	int priority = *p;
 	void (*pt)(int) = (void*)*(p + 1);
 
 	while(1){
-		if(priority == PREEMPT_TASK_PRIORITY)
-			OSSemPend(preempt_sem, 0, &err);
-		else if(priority == PREEMPT_TASK_PRIORITY_2)
-			OSSemPend(preempt_sem_2, 0, &err);
-		else if(priority == PREEMPT_TASK_PRIORITY_3)
-			OSSemPend(preempt_sem_3, 0, &err);
-		else if(priority == CRITICAL_TASK_PRIORITY)
-			OSSemPend(mbox, 0, &err);
 
-
+		//Wait for the interrupt to begin transfer
+		OSSemPend(mbox, 0, &err);
 
 		int done = 0;
 		int first = 0;
 		//barrier function
 		CriticalFunctionPointers* cp =
 				(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
+
+		//This is a crude way of synchronizing the beginning of the task
+		//on both cores
 		while (done == 0) {
 			altera_avalon_mutex_lock(mutex, 1); //Acquire the hardware mutex
 			{
 				if(first == 0){
-					cp->checkout0 = 1;
+					cp->checkout[0] = 1;
 					first = 1;
 				}
-				if( cp->checkout1 == 1){
-					cp->checkout1 = 0;
+				if( cp->checkout[1] == 1){
+					cp->checkout[1] = 0;
 					done = 1;
 				}
 
 			}
 			altera_avalon_mutex_unlock(mutex);
 		}
-		if (alt_timestamp_start() < 0)
-				{
-				printf ("No timestamp device available\n");
-				}
 
-				long registers[8];
-				context_switch(registers);
-				set_gp();
-				pt(priority);
-				restore_gp();
-				context_restore(registers);
-				alt_u64 t = alt_timestamp();
-				cp->core_time[0] = t;
+		//Context switch is necessary to clear the callee saved registers
+		long registers[8];
+		context_switch(registers);
+
+		//Set the global pointer in case of compilation issues related
+		//to global variables
+		set_gp();
+		//call the critical task
+		pt(priority);
+		//restore the original global pointer
+		restore_gp();
+		//Restore the callee saved registers
+		context_restore(registers);
+		//Get the end time
+		alt_u64 t = alt_timestamp();
+		//store the end time
+		cp->core_time[0] = t;
 	}
 }
 
@@ -156,7 +151,6 @@ void init_tlb(){
 
 }
 
-
 /*
  * Main
  */
@@ -165,50 +159,33 @@ int main(void) {
 	init_tlb();
 	enable_tlb();
 	void (*pt)(int);
-	 printf("Hello from Nios II!\n");
-		mutex = altera_avalon_mutex_open(MUTEX_0_NAME);			//Initialize the hardware mutex
-		mbox = OSSemCreate(0);				//Initialize the message box
-		preempt_sem = OSSemCreate(0);
-		preempt_sem_2 = OSSemCreate(0);
-		preempt_sem_3 = OSSemCreate(0);
-		CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
-		while(cp->init_complete == 0);
-		altera_avalon_mutex_lock(mutex, 1);				//Acquire the hardware mutex
-		{
-
-
-			ct = cp->critical;
-			pt = cp->preempt;
-		}
-		altera_avalon_mutex_unlock(mutex);				//Memory
-
-
+	printf("Hello from Nios II!\n");
+	mutex = altera_avalon_mutex_open(MUTEX_0_NAME);			//Initialize the hardware mutex
+	mbox = OSSemCreate(0);				//Initialize the message box
+	CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
+	
+	//Wait for monitor to be done initialization of shared variables before retrieving their values
+	while(cp->init_complete == 0);
 	init_cpu1_isr();										//Initialize the ISR
 
+	//Set default block size for fingerprinting
 	fprint_set_block_size(0x3ff);
 
 
-
+	// Set the task(only one in this example)
 	void* arg_5[2] = {(void*)CRITICAL_TASK_PRIORITY,pt};
-		OSTaskCreateExt(preemption_task, &arg_5, &critical_task_stk[TASK_STACKSIZE - 1],
-				CRITICAL_TASK_PRIORITY, CRITICAL_TASK_PRIORITY,
-				critical_task_stk, TASK_STACKSIZE, NULL,0);
-//	void* arg[2] = {(void*)PREEMPT_TASK_PRIORITY,pt};
-//		OSTaskCreateExt(preemption_task,(void*) &arg, (void *) &preempt_task_stk[TASK_STACKSIZE - 1],
-//				PREEMPT_TASK_PRIORITY, PREEMPT_TASK_PRIORITY, preempt_task_stk, TASK_STACKSIZE, NULL,0);
-//	void* arg_2[2] = {(void*)PREEMPT_TASK_PRIORITY_2,pt};
-//		OSTaskCreateExt(preemption_task, (void*) &arg_2, (void *) &preempt_task_stk_2[TASK_STACKSIZE - 1],
-//				PREEMPT_TASK_PRIORITY_2, PREEMPT_TASK_PRIORITY_2, preempt_task_stk_2, TASK_STACKSIZE, NULL,0);
-//	void* arg_3[2] = {(void*)PREEMPT_TASK_PRIORITY_3,pt};
-//		OSTaskCreateExt(preemption_task, (void*) &arg_3, (void *) &preempt_task_stk_3[TASK_STACKSIZE - 1],
-//				PREEMPT_TASK_PRIORITY_3, PREEMPT_TASK_PRIORITY_3, preempt_task_stk_3, TASK_STACKSIZE, NULL,0);
-	//Start OS
+	OSTaskCreateExt(preemption_task, &arg_5, &critical_task_stk[TASK_STACKSIZE - 1],
+					CRITICAL_TASK_PRIORITY, CRITICAL_TASK_PRIORITY,
+					critical_task_stk, TASK_STACKSIZE, NULL,0);
+
+	//Signal that the core has finished initializing
 	altera_avalon_mutex_lock(mutex, 1);				//Acquire the hardware mutex
 	{
-		cp->core0_ready = 1;
+		cp->core_ready[0] = 1;
 	}
 	altera_avalon_mutex_unlock(mutex);				//Memory
 
+	// Start OS
 	OSStart();
 	return 0;
 }

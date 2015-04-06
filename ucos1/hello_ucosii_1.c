@@ -179,9 +179,9 @@ int main(void) {
 	fprint_set_block_size(0x3ff);
 
 
-	//Set the task(only one in this example)
+	// Set the task(only one in this example)
 	void* arg_5[2] = {(void*)CRITICAL_TASK_PRIORITY,pt};
-			OSTaskCreateExt(preemption_task, &arg_5, &critical_task_stk[TASK_STACKSIZE - 1],
+	OSTaskCreateExt(preemption_task, &arg_5, &critical_task_stk[TASK_STACKSIZE - 1],
 					CRITICAL_TASK_PRIORITY, CRITICAL_TASK_PRIORITY,
 					critical_task_stk, TASK_STACKSIZE, NULL,0);
 
@@ -192,6 +192,7 @@ int main(void) {
 		cp->core_ready[1] = 1;
 	}
 	altera_avalon_mutex_unlock(mutex);				//Memory
+	
 	//Start OS
 	OSStart();
 	return 0;
