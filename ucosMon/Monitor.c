@@ -122,11 +122,13 @@ void schedule_task(void* pdata){
 		OSSemPend(start_schedule, 0, &err);
 		int i;
 		int x;
+		alt_u64 t1, t2, tdiff;
 
 		// Run Sum function
+		t1 = alt_timestamp();
 		sum_task(&s_args);
-		x = OSTimeGet();
-		alt_u64 t = alt_timestamp();
+		t2 = alt_timestamp();
+		tdiff = t2 - t1;
 		i++;
 
 		// //Acquire the mutex and set cores 1 and 2 to execute the first task
