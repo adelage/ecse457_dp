@@ -117,20 +117,13 @@ void schedule_task(void* pdata){
 	s_args.priority = CRITICAL_TASK_PRIORITY;
 	s_args.sum_data = &s_data;
 	s_args.cruise_control_data = &cc_data;
-	
+
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
 		int i;
-		int x = OSTimeGet();
-		printf("%d", x);
-
 
 		// Run Sum function
 		sum_task(&s_args);
-
-		// Print time
-		x = OSTimeGet();
-		printf("%d", x);
 
 		// //Acquire the mutex and set cores 1 and 2 to execute the first task
 		// altera_avalon_mutex_lock(mutex, 1);
