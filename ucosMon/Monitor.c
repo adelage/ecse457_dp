@@ -137,8 +137,8 @@ void schedule_task(void* pdata){
 		// 	}
 		// }
 		// altera_avalon_mutex_unlock(mutex);
-		//Wait a minute before trying again
-		OSTimeDlyHMSM(0, 0, 10, 0);
+		//Wait 10 seconds before trying again
+		//OSTimeDlyHMSM(0, 0, 10, 0);
 
 
 
