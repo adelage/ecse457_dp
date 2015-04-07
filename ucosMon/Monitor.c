@@ -102,26 +102,28 @@ void schedule_task(void* pdata){
 	printf("Monitor!\n");
 	CriticalFunctionPointers* cp =
 						(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
+
+	// Initialize critical function arguments
+	sum_data s_data;
+	s_data.sum_in1 = 2.0;
+	s_data.sum_in2 = 1.0;
+	s_data.sum_out = 0.0;
+
+	cruise_control_data cc_data;
+	cc_data.cc_desired_speed = 0.0;
+	cc_data.cc_current_speed = 0.0;
+
+	sum_args s_args;
+	s_args.priority = CRITICAL_TASK_PRIORITY;
+	s_args.sum_data = &s_data;
+	s_args.cruise_control_data = &cc_data;
+	
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
 		int i;
 		int x = OSTimeGet();
 		printf("%d", x);
 
-		// Initialize critical function arguments
-		sum_data s_data;
-		s_data.sum_in1 = 2.0;
-		s_data.sum_in2 = 1.0;
-		s_data.sum_out = 0.0;
-
-		cruise_control_data cc_data;
-		cc_data.cc_desired_speed = 0.0;
-		cc_data.cc_current_speed = 0.0;
-
-		sum_args s_args;
-		s_args.priority = CRITICAL_TASK_PRIORITY;
-		s_args.sum_data = &s_data;
-		s_args.cruise_control_data = &cc_data;
 
 		// Run Sum function
 		sum_task(&s_args);
