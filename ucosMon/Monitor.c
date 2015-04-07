@@ -104,6 +104,21 @@ void schedule_task(void* pdata){
 	CriticalFunctionPointers* cp =
 						(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
 
+	// Initialize critical function arguments
+	sum_data s_data;
+	s_data.sum_in1 = 2.0;
+	s_data.sum_in2 = 1.0;
+	s_data.sum_out = 0.0;
+
+	cruise_control_data cc_data;
+	cc_data.cc_desired_speed = 0.0;
+	cc_data.cc_current_speed = 0.0;
+
+	sum_args s_args;
+	s_args.priority = CRITICAL_TASK_PRIORITY;
+	s_args.sum_data = &s_data;
+	s_args.cruise_control_data = &cc_data;
+
 	// Initialize Altera timer
 	alt_timestamp_start();
 
