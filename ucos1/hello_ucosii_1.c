@@ -28,7 +28,6 @@ alt_mutex_dev* mutex;									//hardware mutex pointer
 void (*ct)(int);
 
 int *isr_1_ptr = (int *) PROCESSOR1_0_CPU_IRQ_0_BASE;	//Pointer to IRQ Register
-								//(CPU0 -> CPU1)
 
 #define   TASK_STACKSIZE       1024						//Stack size for all tasks
 

@@ -63,7 +63,7 @@ static void handle_cpu0_interrupt(void* context) {
 
 		CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
 		priority = cp->priority[0];
-		*isr_1_ptr = 0;
+		*isr_0_ptr = 0;
 
 	}
 	altera_avalon_mutex_unlock(mutex);
@@ -74,7 +74,7 @@ static void handle_cpu0_interrupt(void* context) {
 
 static void init_cpu0_isr(void) {
 	alt_ic_isr_register(PROCESSOR0_0_CPU_IRQ_0_IRQ_INTERRUPT_CONTROLLER_ID,
-			PROCESSOR0_0_CPU_IRQ_0_IRQ, handle_cpu1_interrupt, (void*) NULL,
+			PROCESSOR0_0_CPU_IRQ_0_IRQ, handle_cpu0_interrupt, (void*) NULL,
 			(void*) NULL);
 }
 
@@ -166,7 +166,7 @@ int main(void) {
 	
 	//Wait for monitor to be done initialization of shared variables before retrieving their values
 	while(cp->init_complete == 0);
-	init_cpu1_isr();										//Initialize the ISR
+	init_cpu0_isr();										//Initialize the ISR
 
 	//Set default block size for fingerprinting
 	fprint_set_block_size(0x3ff);
