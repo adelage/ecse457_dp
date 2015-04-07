@@ -127,6 +127,8 @@ void schedule_task(void* pdata){
 		sum_task(&s_args);
 		x = OSTimeGet();
 		i++;
+		OSTimeDly(40 - x);
+		i++;
 
 		// //Acquire the mutex and set cores 1 and 2 to execute the first task
 		// altera_avalon_mutex_lock(mutex, 1);
