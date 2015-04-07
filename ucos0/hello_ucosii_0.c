@@ -171,9 +171,9 @@ int main(void) {
 
 	// Set the task(only one in this example)
 	int arg_5 = CRITICAL_TASK_PRIORITY;
-	OSTaskCreateExt(preemption_task, &arg_5, &critical_task_stk[TASK_STACKSIZE - 1],
-					CRITICAL_TASK_PRIORITY, CRITICAL_TASK_PRIORITY,
-					critical_task_stk, TASK_STACKSIZE, NULL,0);
+	// OSTaskCreateExt(preemption_task, &arg_5, &critical_task_stk[TASK_STACKSIZE - 1],
+	// 				CRITICAL_TASK_PRIORITY, CRITICAL_TASK_PRIORITY,
+	// 				critical_task_stk, TASK_STACKSIZE, NULL,0);
 
 	// Signal that the core has finished initializing
 	altera_avalon_mutex_lock(mutex, 1);				// Acquire the hardware mutex
