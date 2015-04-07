@@ -121,6 +121,7 @@ void schedule_task(void* pdata){
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
 		int i;
+		int x;
 
 		// Run Sum function
 		sum_task(&s_args);
