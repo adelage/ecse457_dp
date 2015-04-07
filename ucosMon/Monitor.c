@@ -103,6 +103,11 @@ void schedule_task(void* pdata){
 	CriticalFunctionPointers* cp =
 						(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
 
+	// Initialize Altera timer
+	if (alt_timestamp_start() < 0) {
+		printf("No timestamp device available\n");
+	}
+	
 	// Initialize critical function arguments
 	sum_data s_data;
 	s_data.sum_in1 = 2.0;
