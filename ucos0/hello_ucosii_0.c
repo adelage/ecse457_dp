@@ -86,12 +86,10 @@ static void init_cpu0_isr(void) {
 
 INT8U err;
 void preemption_task(void* pdata){
-	int* p = pdata;
-
-	//Some ugly pointer formatting to make sure there are no gp related problems
-	//when calling the task
-	int priority = *p;
-	void (*pt)(int) = (void*)*(p + 1);
+	
+	CriticalFunctionPointers* cp =
+				(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
+	pt = cp->task[0];
 
 	while(1){
 
@@ -158,17 +156,16 @@ int main(void) {
 
 	init_tlb();
 	enable_tlb();
-	void (*pt)(int);
 	printf("Hello from Nios II!\n");
-	mutex = altera_avalon_mutex_open(MUTEX_0_NAME);			//Initialize the hardware mutex
-	mbox = OSSemCreate(0);				//Initialize the message box
+	mutex = altera_avalon_mutex_open(MUTEX_0_NAME);	// Initialize the hardware mutex
+	mbox = OSSemCreate(0);							// Initialize the message box
 	CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
 	
-	//Wait for monitor to be done initialization of shared variables before retrieving their values
+	// Wait for monitor to be done initialization of shared variables before retrieving their values
 	while(cp->init_complete == 0);
-	init_cpu0_isr();										//Initialize the ISR
+	init_cpu0_isr();								// Initialize the ISR
 
-	//Set default block size for fingerprinting
+	// Set default block size for fingerprinting
 	fprint_set_block_size(0x3ff);
 
 
@@ -178,7 +175,7 @@ int main(void) {
 					CRITICAL_TASK_PRIORITY, CRITICAL_TASK_PRIORITY,
 					critical_task_stk, TASK_STACKSIZE, NULL,0);
 
-	//Signal that the core has finished initializing
+	// Signal that the core has finished initializing
 	altera_avalon_mutex_lock(mutex, 1);				//Acquire the hardware mutex
 	{
 		cp->core_ready[0] = 1;
