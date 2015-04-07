@@ -26,6 +26,7 @@
 
 alt_mutex_dev* mutex;									//hardware mutex pointer
 void (*ct)(int);
+void (*pt)(void*);
 
 int *isr_1_ptr = (int *) PROCESSOR1_0_CPU_IRQ_0_BASE;	//Pointer to IRQ Register
 
@@ -131,7 +132,7 @@ void preemption_task(void* pdata){
 		//to global variables
 		set_gp();
 		//call the critical task
-		pt(priority);
+		pt(cp->args[1]);
 		//restore the original global pointer
 		restore_gp();
 		//Restore the callee saved registers

@@ -31,6 +31,7 @@
 
 alt_mutex_dev* mutex;									//hardware mutex pointer
 void (*ct)(int);
+void (*pt)(void*);
 
 int *isr_0_ptr = (int *) PROCESSOR0_0_CPU_IRQ_0_BASE;	//Pointer to IRQ Register
 
@@ -128,7 +129,7 @@ void preemption_task(void* pdata){
 		//to global variables
 		set_gp();
 		//call the critical task
-		pt(priority);
+		pt(cp->args[0]);
 		//restore the original global pointer
 		restore_gp();
 		//Restore the callee saved registers
@@ -176,11 +177,11 @@ int main(void) {
 					critical_task_stk, TASK_STACKSIZE, NULL,0);
 
 	// Signal that the core has finished initializing
-	altera_avalon_mutex_lock(mutex, 1);				//Acquire the hardware mutex
+	altera_avalon_mutex_lock(mutex, 1);				// Acquire the hardware mutex
 	{
 		cp->core_ready[0] = 1;
 	}
-	altera_avalon_mutex_unlock(mutex);				//Memory
+	altera_avalon_mutex_unlock(mutex);				// Memory
 
 	// Start OS
 	OSStart();
