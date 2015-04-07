@@ -144,7 +144,6 @@ C_SRCS += Derivative_data.c
 C_SRCS += Sum.c
 C_SRCS += Gain.c
 C_SRCS += Gain_data.c
-C_SRCS += car_data.c
 CXX_SRCS :=
 ASM_SRCS += context_switch.S
 ASM_SRCS += gp.S
