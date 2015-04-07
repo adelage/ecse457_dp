@@ -67,7 +67,7 @@ static void handle_cpu0_interrupt(void* context) {
 
 	}
 	altera_avalon_mutex_unlock(mutex);
-	if(task_id == CRITICAL_TASK_PRIORITY)
+	if(priority == CRITICAL_TASK_PRIORITY)
 		OSSemPost(mbox);
 
 }
