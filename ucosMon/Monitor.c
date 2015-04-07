@@ -120,21 +120,19 @@ void schedule_task(void* pdata){
 	s_args.cruise_control_data = &cc_data;
 
 	// Initialize Altera timer
-	if (alt_timestamp_start() < 0)
-			printf ("No timestamp device available\n");
+	if (alt_timestamp_start() < 0){
+		printf ("No timestamp device available\n");
+	}
 
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
 		int i;
-		int x;
-		alt_u64 t1, t2, tdiff;
+		int t_os;
 
 		// Run Sum function
-		t1 = alt_timestamp();
+		t_os = OSTimeGet();
 		sum_task(&s_args);
-		t2 = alt_timestamp();
-		tdiff = t2 - t1;
-		i++;
+
 
 		// //Acquire the mutex and set cores 1 and 2 to execute the first task
 		// altera_avalon_mutex_lock(mutex, 1);

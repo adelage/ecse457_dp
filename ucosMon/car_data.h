@@ -8,8 +8,8 @@
  * 																			*
  ***************************************************************************/
 
-#ifndef CAR_INPUTS_H_
-#define CAR_INPUTS_H_
+#ifndef CAR_DATA_H_
+#define CAR_DATA_H_
 
  #include "rtwtypes.h"                  /* MathWorks ty*/
 
@@ -29,4 +29,4 @@ typedef struct car_output {
 	boolean_T tfl_light_on;
 }car_output;
 
-#endif /* CAR_INPUTS_H_ */
+#endif /* CAR_DATA_H_ */
