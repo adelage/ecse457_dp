@@ -121,6 +121,9 @@ void preemption_task(void* pdata){
 			altera_avalon_mutex_unlock(mutex);
 		}
 
+		// Set default block size for fingerprinting
+		fprint_set_block_size(cp->blocksize[1]);
+
 		//Context switch is necessary to clear the callee saved registers
 		long registers[8];
 		context_switch(registers);
@@ -165,10 +168,6 @@ int main(void) {
 	// Wait for monitor to be done initialization of shared variables before retrieving their values
 	while(cp->init_complete == 0);
 	init_cpu0_isr();								// Initialize the ISR
-
-	// Set default block size for fingerprinting
-	fprint_set_block_size(0x3ff);
-
 
 	// Set the task(only one in this example)
 	int arg_5 = CRITICAL_TASK_PRIORITY;

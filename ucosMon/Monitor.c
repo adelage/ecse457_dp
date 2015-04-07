@@ -126,8 +126,7 @@ void schedule_task(void* pdata){
 		// Run Sum function
 		sum_task(&s_args);
 		x = OSTimeGet();
-		i++;
-		OSTimeDly(40 - x);
+		alt_u64 t = alt_timestamp();
 		i++;
 
 		// //Acquire the mutex and set cores 1 and 2 to execute the first task
