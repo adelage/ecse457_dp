@@ -3,15 +3,12 @@
  * McGill University.      													*
  * All rights reserved. All use of this software and documentation is     	*
  * subject to the License Agreement located at the end of this file below.	*
- ****************************************************************************
- * Description:                                                           	*
- * 																			*
  ***************************************************************************/
 
 #ifndef CAR_INPUTS_H_
 #define CAR_INPUTS_H_
 
- #include "rtwtypes.h"                  /* MathWorks ty*/
+#include "rtwtypes.h"                  /* MathWorks ty*/
 
 // Type definition for structure holding car control loop inputs
 typedef struct car_input {
