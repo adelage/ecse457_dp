@@ -104,8 +104,8 @@ void schedule_task(void* pdata){
 						(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
 
 	// Initialize Altera timer
-	alt_timestamp_start()
-	
+	alt_timestamp_start();
+
 	// Initialize critical function arguments
 	sum_data s_data;
 	s_data.sum_in1 = 2.0;
