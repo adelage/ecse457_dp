@@ -155,7 +155,6 @@ void init_tlb(){
 
 	//Enable these 4 translations
 	set_enable(0x2);
-
 }
 
 /*
