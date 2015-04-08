@@ -436,6 +436,15 @@ int main(void) {
 
 	// Run initialization functions for Simulink blocks
 	AirbagModel_initialize();
+	CollisionAvoidance_initialize();
+	Compare_initialize();
+	CruiseControlSystem_initialize();
+	Derivative_initialize();
+	FuelSensor_initialize();
+	Gain_initialize();
+	Sum_initialize();
+	TractionControl_initialize();
+	TransmissionControl_initialize();
 
 	//Start up the tasks and OS
 	int arg_5 = CRITICAL_TASK_PRIORITY;
