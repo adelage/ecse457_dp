@@ -122,14 +122,7 @@ void schedule_task(void* pdata){
 	// Initialize Altera timer
 	if (alt_timestamp_start() < 0){
 		printf ("No timestamp device available\n");
-	}
-
-	// Variables used to check stack
-	OS_ERR err;
-    CPU_STK_SIZE n_free;
-    CPU_STK_SIZE n_used;
-
-    OSTaskStkChk(NULL, &n_free, &n_used, &err);
+	} 
 
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
@@ -137,7 +130,7 @@ void schedule_task(void* pdata){
 		int t_os;
 
 		// Run Sum function
-		t_os = OSTimeGet();
+		t_os = OSTimeGet()
 		sum_task(&s_args);
 
 		// Delay, then run Cruise Control function
@@ -155,9 +148,7 @@ void schedule_task(void* pdata){
 		// 	}
 		// }
 		// altera_avalon_mutex_unlock(mutex);
-		
-		OSTaskStkChk(NULL, &n_free, &n_used, &err);
-		
+
 		printf("Done iteration.\n");
 
 		//Wait 10 seconds before trying again
