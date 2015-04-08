@@ -133,6 +133,9 @@ void schedule_task(void* pdata){
 		t_os = OSTimeGet();
 		sum_task(&s_args);
 
+		// Delay, then run Cruise Control function
+		OSTimeDly(20 - t_os);
+
 
 		// //Acquire the mutex and set cores 1 and 2 to execute the first task
 		// altera_avalon_mutex_lock(mutex, 1);
@@ -427,6 +430,9 @@ int main(void) {
 	}
 	cpg.core_ready[0] = 0;
 	cpg.core_ready[1] = 0;
+
+	// Run initialization functions for Simulink blocks
+	AirbagModel_initialize();
 
 	//Start up the tasks and OS
 	int arg_5 = CRITICAL_TASK_PRIORITY;
