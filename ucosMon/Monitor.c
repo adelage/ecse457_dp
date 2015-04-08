@@ -127,9 +127,12 @@ void schedule_task(void* pdata){
 	// Variables used to check stack usage
 	INT32U OSFree;
   	INT32U OSUsed;
+  	OS_STK_DATA OSStkData;
+  	OSStkData.OSFree = OSFree;
+  	OSStkData.OSUsed = OSUsed;
 
   	// Check task usage
-	OSTaskStkChk(&OS_PRIO_SELF, &OSFree, &OSUsed);
+	OSTaskStkChk(OS_PRIO_SELF, &OSStkData);
 
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
@@ -141,7 +144,7 @@ void schedule_task(void* pdata){
 		sum_task(&s_args);
 
 		// Check task usage
-		OSTaskStkChk(&OS_PRIO_SELF, &OSFree, &OSUsed);
+		OSTaskStkChk(OS_PRIO_SELF, &OSStkData);
 
 		// Delay, then run Cruise Control function
 		OSTimeDly(20 - t_os);
