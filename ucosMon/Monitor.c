@@ -130,7 +130,7 @@ void schedule_task(void* pdata){
 		int t_os;
 
 		// Run Sum function
-		t_os = OSTimeGet()
+		t_os = OSTimeGet();
 		sum_task(&s_args);
 
 		// Delay, then run Cruise Control function
