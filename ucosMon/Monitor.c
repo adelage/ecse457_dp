@@ -31,6 +31,17 @@
 #include "system.h"
 #include "gp.h"
 
+#include "AirbagModel.h"
+#include "CollisionAvoidance.h"
+#include "CruiseControlSystem.h"
+#include "FuelSensor.h"
+#include "TractionControl.h"
+#include "TransmissionControl.h"
+#include "Gain.h"
+#include "Sum.h"
+#include "Derivative.h"
+#include "Compare.h"
+
 /***********************************
  * Local Variables
  **********************************/

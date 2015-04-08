@@ -12,19 +12,6 @@
 #include "critical.h"
 #include "gp.h"
 
-/* Mathworks headers */
-#include "rtwtypes.h"                  /* MathWorks ty*/
-#include "AirbagModel.h"
-#include "CollisionAvoidance.h"
-#include "CruiseControlSystem.h"
-#include "FuelSensor.h"
-#include "TractionControl.h"
-#include "TransmissionControl.h"
-#include "Gain.h"
-#include "Sum.h"
-#include "Derivative.h"
-#include "Compare.h"
-
 // Tasks to be fingerprinted
 
 // Airbag task, calls AirbagModel.c, Gain.c and Compare.c functions
