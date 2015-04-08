@@ -124,6 +124,13 @@ void schedule_task(void* pdata){
 		printf ("No timestamp device available\n");
 	}
 
+	// Variables used to check stack
+	OS_ERR err;
+    CPU_STK_SIZE n_free;
+    CPU_STK_SIZE n_used;
+
+    OSTaskStkChk(NULL, &n_free, &n_used, &err);
+
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
 		int i;
@@ -148,6 +155,8 @@ void schedule_task(void* pdata){
 		// 	}
 		// }
 		// altera_avalon_mutex_unlock(mutex);
+		
+		OSTaskStkChk(NULL, &n_free, &n_used, &err);
 		
 		printf("Done iteration.\n");
 
