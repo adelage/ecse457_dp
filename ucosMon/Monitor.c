@@ -147,7 +147,7 @@ void schedule_task(void* pdata){
 		OSTaskStkChk(OS_PRIO_SELF, &OSStkData);
 
 		// Delay, then run Cruise Control function
-		OSTimeDly(20 - t_os);
+		//OSTimeDly(20 - t_os);
 
 
 		// //Acquire the mutex and set cores 1 and 2 to execute the first task
