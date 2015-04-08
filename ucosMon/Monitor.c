@@ -203,7 +203,7 @@ void print_execution_times(void* pdata){
 	while(1){
 		OSTimeDlyHMSM(0,0,10,0);
 		int i;
-		for(i = 0; i < 8; i++){
+		for(i = 0; i < 2; i++){
 
 			printf("core %d finished at time %llu\n",i,cp->core_time[i]);
 		}
@@ -436,7 +436,6 @@ int main(void) {
 	OSTaskCreateExt(print_status_task, &arg_5, &print_status_stk[TASK_STACKSIZE - 1],
 				PRINT_STATUS_PRIORITY, PRINT_STATUS_PRIORITY,
 				print_status_stk, TASK_STACKSIZE, NULL,OS_TASK_OPT_STK_CHK + OS_TASK_OPT_STK_CLR);
-
 
 	//Start operating system
 	OSStart();
