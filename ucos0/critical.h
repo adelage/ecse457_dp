@@ -11,6 +11,18 @@
 #include "rtwtypes.h"                  /* MathWorks ty*/
 #include "fingerprint.h"
 
+/* Mathworks headers */
+#include "AirbagModel.h"
+#include "CollisionAvoidance.h"
+#include "CruiseControlSystem.h"
+#include "FuelSensor.h"
+#include "TractionControl.h"
+#include "TransmissionControl.h"
+#include "Gain.h"
+#include "Sum.h"
+#include "Derivative.h"
+#include "Compare.h"
+
 // Type definitions that hold the data for each stage in the system
 typedef struct airbag_data {
 	real_T gain_in;
