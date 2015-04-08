@@ -51,7 +51,7 @@ int *isr_1_ptr = (int *) PROCESSOR1_0_CPU_IRQ_0_BASE;
  *
  * TASK STACK DECLARATIONS
  */
-#define   TASK_STACKSIZE       1500						//Stack size for all tasks. Originally 768.
+#define   TASK_STACKSIZE       1024						//Stack size for all tasks. Originally 768.
 OS_STK schedule_task_stk[TASK_STACKSIZE] __attribute__ ((section (".critical")));
 OS_STK print_status_stk[TASK_STACKSIZE] __attribute__ ((section (".critical")));
 OS_STK print_execution_times_stk[TASK_STACKSIZE] __attribute__ ((section (".critical")));
