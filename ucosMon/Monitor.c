@@ -122,7 +122,14 @@ void schedule_task(void* pdata){
 	// Initialize Altera timer
 	if (alt_timestamp_start() < 0){
 		printf ("No timestamp device available\n");
-	} 
+	}
+
+	// Variables used to check stack usage
+	INT32U OSFree;
+  	INT32U OSUsed;
+
+  	// Check task usage
+	OSTaskStkChk(OS_PRIO_SELF, OSFree, OSUsed);
 
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
@@ -132,6 +139,9 @@ void schedule_task(void* pdata){
 		// Run Sum function
 		t_os = OSTimeGet();
 		sum_task(&s_args);
+
+		// Check task usage
+		OSTaskStkChk(OS_PRIO_SELF, OSFree, OSUsed);
 
 		// Delay, then run Cruise Control function
 		OSTimeDly(20 - t_os);
@@ -451,9 +461,9 @@ int main(void) {
 	OSTaskCreateExt(schedule_task, &arg_5, &schedule_task_stk[TASK_STACKSIZE - 1],
 			SCHEDULE_TASK_PRIORITY, SCHEDULE_TASK_PRIORITY,
 			schedule_task_stk, TASK_STACKSIZE, NULL,OS_TASK_OPT_STK_CHK + OS_TASK_OPT_STK_CLR);
-	// OSTaskCreateExt(print_status_task, &arg_5, &print_status_stk[TASK_STACKSIZE - 1],
-	// 			PRINT_STATUS_PRIORITY, PRINT_STATUS_PRIORITY,
-	// 			print_status_stk, TASK_STACKSIZE, NULL,OS_TASK_OPT_STK_CHK + OS_TASK_OPT_STK_CLR);
+	OSTaskCreateExt(print_status_task, &arg_5, &print_status_stk[TASK_STACKSIZE - 1],
+				PRINT_STATUS_PRIORITY, PRINT_STATUS_PRIORITY,
+				print_status_stk, TASK_STACKSIZE, NULL,OS_TASK_OPT_STK_CHK + OS_TASK_OPT_STK_CLR);
 
 	//Start operating system
 	OSStart();
