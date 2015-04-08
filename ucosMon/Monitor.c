@@ -51,7 +51,7 @@ int *isr_1_ptr = (int *) PROCESSOR1_0_CPU_IRQ_0_BASE;
  *
  * TASK STACK DECLARATIONS
  */
-#define   TASK_STACKSIZE       1000						//Stack size for all tasks. Originally 768.
+#define   TASK_STACKSIZE       2048						//Stack size for all tasks. Originally 768.
 OS_STK schedule_task_stk[TASK_STACKSIZE] __attribute__ ((section (".critical")));
 OS_STK print_status_stk[TASK_STACKSIZE] __attribute__ ((section (".critical")));
 OS_STK print_execution_times_stk[TASK_STACKSIZE] __attribute__ ((section (".critical")));
@@ -148,8 +148,11 @@ void schedule_task(void* pdata){
 		// 	}
 		// }
 		// altera_avalon_mutex_unlock(mutex);
+		
+		printf("Done iteration.\n");
+
 		//Wait 10 seconds before trying again
-		OSTimeDlyHMSM(0, 0, 0, 1);
+		OSTimeDlyHMSM(0, 0, 10, 0);
 
 
 
