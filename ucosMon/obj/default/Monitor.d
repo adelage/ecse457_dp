@@ -16,7 +16,7 @@ obj/default/Monitor.o: Monitor.c \
  ../ucosMon_bsp//HAL/inc/sys/alt_llist.h \
  ../ucosMon_bsp//HAL/inc/priv/alt_alarm.h \
  ../ucosMon_bsp//UCOSII/inc/ucos_ii.h ../ucosMon_bsp//HAL/inc/os_cpu.h \
- shared_mem.h fingerprint.h critical.h \
+ shared_mem.h fingerprint.h critical.h rtwtypes.h car_data.h \
  ../ucosMon_bsp//HAL/inc/priv/alt_busy_sleep.h \
  ../ucosMon_bsp//HAL/inc/sys/alt_dma.h \
  ../ucosMon_bsp//HAL/inc/sys/alt_dma_dev.h \
@@ -75,6 +75,10 @@ shared_mem.h:
 fingerprint.h:
 
 critical.h:
+
+rtwtypes.h:
+
+car_data.h:
 
 ../ucosMon_bsp//HAL/inc/priv/alt_busy_sleep.h:
 

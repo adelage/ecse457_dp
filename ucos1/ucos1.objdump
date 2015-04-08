@@ -1102,7 +1102,7 @@ static void handle_cpu1_interrupt(void* context) {
   43221c:	defffc04 	addi	sp,sp,-16
   432220:	dfc00315 	stw	ra,12(sp)
   432224:	d9000215 	stw	r4,8(sp)
-	unsigned short task_id;
+	unsigned short priority;
 	altera_avalon_mutex_lock(mutex, 1);
   432228:	d0a6f817 	ldw	r2,-25632(gp)
   43222c:	1009883a 	mov	r4,r2
@@ -1113,7 +1113,7 @@ static void handle_cpu1_interrupt(void* context) {
 		CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
   432238:	00809434 	movhi	r2,592
   43223c:	d8800015 	stw	r2,0(sp)
-		task_id = cp->task_id1;
+		priority = cp->priority[1];
   432240:	d8800017 	ldw	r2,0(sp)
   432244:	1080038b 	ldhu	r2,14(r2)
   432248:	d880010d 	sth	r2,4(sp)
@@ -1126,7 +1126,7 @@ static void handle_cpu1_interrupt(void* context) {
   432254:	d0a6f817 	ldw	r2,-25632(gp)
   432258:	1009883a 	mov	r4,r2
   43225c:	04412080 	call	441208 <altera_avalon_mutex_unlock>
-	if(task_id == CRITICAL_TASK_PRIORITY)
+	if(priority == CRITICAL_TASK_PRIORITY)
   432260:	d880010b 	ldhu	r2,4(sp)
   432264:	10800158 	cmpnei	r2,r2,5
   432268:	1000031e 	bne	r2,zero,432278 <handle_cpu1_interrupt+0x5c>
@@ -1170,250 +1170,240 @@ void preemption_task(void* pdata){
   4322b4:	deffee04 	addi	sp,sp,-72
   4322b8:	dfc01115 	stw	ra,68(sp)
   4322bc:	d9001015 	stw	r4,64(sp)
-	int* p = pdata;
+	
   4322c0:	d8801017 	ldw	r2,64(sp)
   4322c4:	d8800215 	stw	r2,8(sp)
+	CriticalFunctionPointers* cp =
+				(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
+	pt = cp->task[1];
 
-	//Some ugly pointer formatting to make sure there are no gp related problems
-	//when calling the task
-	int priority = *p;
   4322c8:	d8800217 	ldw	r2,8(sp)
   4322cc:	10800017 	ldw	r2,0(r2)
   4322d0:	d8800315 	stw	r2,12(sp)
-	void (*pt)(int) = (void*)*(p + 1);
+	while(1){
   4322d4:	d8800217 	ldw	r2,8(sp)
   4322d8:	10800104 	addi	r2,r2,4
   4322dc:	10800017 	ldw	r2,0(r2)
   4322e0:	d8800415 	stw	r2,16(sp)
 
-	while(1){
-
 		//Wait for the interrupt to begin transfer
 		OSSemPend(mbox, 0, &err);
+
+		int done = 0;
   4322e4:	d0a6f717 	ldw	r2,-25636(gp)
   4322e8:	1009883a 	mov	r4,r2
   4322ec:	000b883a 	mov	r5,zero
   4322f0:	d1a6fa04 	addi	r6,gp,-25624
   4322f4:	043cfa00 	call	43cfa0 <OSSemPend>
-
-		int done = 0;
-  4322f8:	d8000015 	stw	zero,0(sp)
 		int first = 0;
-  4322fc:	d8000115 	stw	zero,4(sp)
 		//barrier function
+  4322f8:	d8000015 	stw	zero,0(sp)
 		CriticalFunctionPointers* cp =
-  432300:	00809434 	movhi	r2,592
-  432304:	d8800515 	stw	r2,20(sp)
+  4322fc:	d8000115 	stw	zero,4(sp)
 				(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
 
+  432300:	00809434 	movhi	r2,592
+  432304:	d8800515 	stw	r2,20(sp)
 		//This is a crude way of synchronizing the beginning of the task
 		//on both cores
 		while (done == 0) {
-  432308:	00001606 	br	432364 <preemption_task+0xb0>
 			altera_avalon_mutex_lock(mutex, 1); //Acquire the hardware mutex
+			{
+  432308:	00001606 	br	432364 <preemption_task+0xb0>
+				if(first == 0){
   43230c:	d0a6f817 	ldw	r2,-25632(gp)
   432310:	1009883a 	mov	r4,r2
   432314:	01400044 	movi	r5,1
   432318:	04411200 	call	441120 <altera_avalon_mutex_lock>
-			{
-				if(first == 0){
+					cp->checkout[1] = 1;
+					first = 1;
   43231c:	d8800117 	ldw	r2,4(sp)
   432320:	1000051e 	bne	r2,zero,432338 <preemption_task+0x84>
-					cp->checkout1 = 1;
+				}
   432324:	d8800517 	ldw	r2,20(sp)
   432328:	00c00044 	movi	r3,1
   43232c:	10c00915 	stw	r3,36(r2)
-					first = 1;
+				if( cp->checkout[0] == 1){
   432330:	00800044 	movi	r2,1
   432334:	d8800115 	stw	r2,4(sp)
-				}
-				if( cp->checkout0 == 1){
+					cp->checkout[0] = 0;
+					done = 1;
   432338:	d8800517 	ldw	r2,20(sp)
   43233c:	10800817 	ldw	r2,32(r2)
   432340:	10800058 	cmpnei	r2,r2,1
   432344:	1000041e 	bne	r2,zero,432358 <preemption_task+0xa4>
-					cp->checkout0 = 0;
+				}
   432348:	d8800517 	ldw	r2,20(sp)
   43234c:	10000815 	stw	zero,32(r2)
-					done = 1;
+
   432350:	00800044 	movi	r2,1
   432354:	d8800015 	stw	r2,0(sp)
-				}
-
-			}
-			altera_avalon_mutex_unlock(mutex);
-  432358:	d0a6f817 	ldw	r2,-25632(gp)
-  43235c:	1009883a 	mov	r4,r2
-  432360:	04412080 	call	441208 <altera_avalon_mutex_unlock>
-		CriticalFunctionPointers* cp =
-				(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
-
-		//This is a crude way of synchronizing the beginning of the task
-		//on both cores
-		while (done == 0) {
-  432364:	d8800017 	ldw	r2,0(sp)
-  432368:	103fe826 	beq	r2,zero,43230c <preemption_task+0x58>
 			}
 			altera_avalon_mutex_unlock(mutex);
 		}
 
-		//measure the execution time on each core
-		if (alt_timestamp_start() < 0)
+  432358:	d0a6f817 	ldw	r2,-25632(gp)
+  43235c:	1009883a 	mov	r4,r2
+  432360:	04412080 	call	441208 <altera_avalon_mutex_unlock>
+
+		//This is a crude way of synchronizing the beginning of the task
+		//on both cores
+		while (done == 0) {
+			altera_avalon_mutex_lock(mutex, 1); //Acquire the hardware mutex
+			{
+  432364:	d8800017 	ldw	r2,0(sp)
+  432368:	103fe826 	beq	r2,zero,43230c <preemption_task+0x58>
+		}
+
+		// Set default block size for fingerprinting
+		fprint_set_block_size(cp->blocksize[1]);
+
+		//Context switch is necessary to clear the callee saved registers
   43236c:	044145c0 	call	44145c <alt_timestamp_start>
   432370:	1000030e 	bge	r2,zero,432380 <preemption_task+0xcc>
-			{
-			printf ("No timestamp device available\n");
+		long registers[8];
+		context_switch(registers);
   432374:	01001134 	movhi	r4,68
   432378:	210fb504 	addi	r4,r4,16084
   43237c:	0432a680 	call	432a68 <puts>
-			}
-
-		//Context switch is necessary to clear the callee saved registers
-		long registers[8];
-		context_switch(registers);
-  432380:	d8800804 	addi	r2,sp,32
-  432384:	1009883a 	mov	r4,r2
-  432388:	04329580 	call	432958 <context_switch>
 
 		//Set the global pointer in case of compilation issues related
 		//to global variables
 		set_gp();
-  43238c:	04329cc0 	call	4329cc <set_gp>
 		//call the critical task
-		pt(priority);
+  432380:	d8800804 	addi	r2,sp,32
+  432384:	1009883a 	mov	r4,r2
+  432388:	04329580 	call	432958 <context_switch>
+		pt(cp->args[1]);
+		//restore the original global pointer
+		restore_gp();
+		//Restore the callee saved registers
+  43238c:	04329cc0 	call	4329cc <set_gp>
+		context_restore(registers);
+		//Get the end time
   432390:	d8800417 	ldw	r2,16(sp)
   432394:	d9000317 	ldw	r4,12(sp)
   432398:	103ee83a 	callr	r2
-		//restore the original global pointer
-		restore_gp();
+		alt_u64 t = alt_timestamp();
+		//store the end time
   43239c:	04329d80 	call	4329d8 <restore_gp>
-		//Restore the callee saved registers
-		context_restore(registers);
+		cp->core_time[1] = t;
+	}
   4323a0:	d8800804 	addi	r2,sp,32
   4323a4:	1009883a 	mov	r4,r2
   4323a8:	043299c0 	call	43299c <context_restore>
-		//Get the end time
-		alt_u64 t = alt_timestamp();
+}
+
   4323ac:	04415040 	call	441504 <alt_timestamp>
   4323b0:	d8800615 	stw	r2,24(sp)
   4323b4:	d8c00715 	stw	r3,28(sp)
-		//store the end time
-		cp->core_time[1] = t;
+
+//Initialize the TLB. It uses 4k pages so only one line is necessary
   4323b8:	d8800517 	ldw	r2,20(sp)
   4323bc:	d8c00617 	ldw	r3,24(sp)
   4323c0:	10c01c15 	stw	r3,112(r2)
   4323c4:	d8c00717 	ldw	r3,28(sp)
   4323c8:	10c01d15 	stw	r3,116(r2)
-	}
+void init_tlb(){
   4323cc:	003fc506 	br	4322e4 <preemption_task+0x30>
 
 004323d0 <init_tlb>:
-}
+	set_cputable_entry(1, 0x00431000);
+	set_spmtable_entry(1, 0x04203000);
 
-
-//Initialize the TLB. It uses 4k pages so only one line is necessary
-void init_tlb(){
+	//Enable these 4 translations
+	set_enable(0x2);
   4323d0:	deffff04 	addi	sp,sp,-4
   4323d4:	dfc00015 	stw	ra,0(sp)
-	set_cputable_entry(1, 0x00431000);
+}
   4323d8:	01000044 	movi	r4,1
   4323dc:	014010f4 	movhi	r5,67
   4323e0:	29440004 	addi	r5,r5,4096
   4323e4:	04326400 	call	432640 <set_cputable_entry>
-	set_spmtable_entry(1, 0x04203000);
+
   4323e8:	01000044 	movi	r4,1
   4323ec:	01410834 	movhi	r5,1056
   4323f0:	294c0004 	addi	r5,r5,12288
   4323f4:	043269c0 	call	43269c <set_spmtable_entry>
-
-	//Enable these 4 translations
-	set_enable(0x2);
+/*
+ * Main
+ */
   4323f8:	01000084 	movi	r4,2
   4323fc:	04325c00 	call	4325c0 <set_enable>
-
-}
+int main(void) {
+	
   432400:	dfc00017 	ldw	ra,0(sp)
   432404:	dec00104 	addi	sp,sp,4
   432408:	f800283a 	ret
 
 0043240c <main>:
+	enable_tlb();
+	printf("Hello from Nios II!\n");
+	mutex = altera_avalon_mutex_open(MUTEX_0_NAME);	// Initialize the hardware mutex
+	mbox = OSSemCreate(0);							// Initialize the message box
+	CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
 
-
-/*
- * Main
- */
-int main(void) {
   43240c:	defff604 	addi	sp,sp,-40
   432410:	dfc00915 	stw	ra,36(sp)
-	//start up the TLB. This could be done in the preemption_task wrapper but we never need it off in this
-	//example
-	init_tlb();
+	// Wait for monitor to be done initialization of shared variables before retrieving their values
+	while(cp->init_complete == 0);
+	init_cpu1_isr();								// Initialize the ISR
   432414:	04323d00 	call	4323d0 <init_tlb>
-	enable_tlb();
+
   432418:	04325380 	call	432538 <enable_tlb>
-	void (*pt)(int);
-	printf("Hello from Nios II!\n");
+	// Set the task(only one in this example)
+	int arg_5 = CRITICAL_TASK_PRIORITY;
   43241c:	01001134 	movhi	r4,68
   432420:	210fbd04 	addi	r4,r4,16116
   432424:	0432a680 	call	432a68 <puts>
-		mutex = altera_avalon_mutex_open(MUTEX_0_NAME);			//Initialize the hardware mutex
+	// OSTaskCreateExt(preemption_task, &arg_5, &critical_task_stk[TASK_STACKSIZE - 1],
   432428:	01001134 	movhi	r4,68
   43242c:	210fc204 	addi	r4,r4,16136
   432430:	04410ac0 	call	4410ac <altera_avalon_mutex_open>
   432434:	d0a6f815 	stw	r2,-25632(gp)
-		mbox = OSSemCreate(0);				//Initialize the message box
+	// 				CRITICAL_TASK_PRIORITY, CRITICAL_TASK_PRIORITY,
   432438:	0009883a 	mov	r4,zero
   43243c:	043cb540 	call	43cb54 <OSSemCreate>
   432440:	d0a6f715 	stw	r2,-25636(gp)
-		CriticalFunctionPointers* cp = (CriticalFunctionPointers*)SHARED_MEMORY_BASE;
+	// 				critical_task_stk, TASK_STACKSIZE, NULL,0);
   432444:	00809434 	movhi	r2,592
   432448:	d8800515 	stw	r2,20(sp)
 
-		//Wait for monitor to be done initialization of shared variables before retrieving their values
-		while(cp->init_complete == 0);
+	// Signal that the core has finished initializing
+	altera_avalon_mutex_lock(mutex, 1);				// Acquire the hardware mutex
   43244c:	0001883a 	nop
   432450:	d8800517 	ldw	r2,20(sp)
   432454:	10800717 	ldw	r2,28(r2)
   432458:	103ffd26 	beq	r2,zero,432450 <main+0x44>
-			altera_avalon_mutex_lock(mutex, 1);				//Acquire the hardware mutex
+	{
   43245c:	d0a6f817 	ldw	r2,-25632(gp)
   432460:	1009883a 	mov	r4,r2
   432464:	01400044 	movi	r5,1
   432468:	04411200 	call	441120 <altera_avalon_mutex_lock>
-			{
-
-				//retrieve shared values from monitor
-				ct = cp->critical;
+		cp->core_ready[1] = 1;
+	}
+	altera_avalon_mutex_unlock(mutex);				// Memory
+	
   43246c:	d8800517 	ldw	r2,20(sp)
   432470:	10800117 	ldw	r2,4(r2)
   432474:	d0a6f915 	stw	r2,-25628(gp)
-				pt = cp->preempt;
+	// Start OS
   432478:	d8800517 	ldw	r2,20(sp)
   43247c:	10800217 	ldw	r2,8(r2)
   432480:	d8800615 	stw	r2,24(sp)
-			}
-			altera_avalon_mutex_unlock(mutex);				//Memory
+	OSStart();
+	return 0;
   432484:	d0a6f817 	ldw	r2,-25632(gp)
   432488:	1009883a 	mov	r4,r2
   43248c:	04412080 	call	441208 <altera_avalon_mutex_unlock>
-
-
-	init_cpu1_isr();										//Initialize the ISR
+}
   432490:	04322840 	call	432284 <init_cpu1_isr>
-
-	//Set default block size for fingerprinting
-	fprint_set_block_size(0x3ff);
   432494:	0100ffc4 	movi	r4,1023
   432498:	04328500 	call	432850 <fprint_set_block_size>
-
-
-	//Set the task(only one in this example)
-	void* arg_5[2] = {(void*)CRITICAL_TASK_PRIORITY,pt};
   43249c:	00800144 	movi	r2,5
   4324a0:	d8800715 	stw	r2,28(sp)
   4324a4:	d8800617 	ldw	r2,24(sp)
   4324a8:	d8800815 	stw	r2,32(sp)
-			OSTaskCreateExt(preemption_task, &arg_5, &critical_task_stk[TASK_STACKSIZE - 1],
   4324ac:	d8800704 	addi	r2,sp,28
   4324b0:	00c00144 	movi	r3,5
   4324b4:	d8c00015 	stw	r3,0(sp)
@@ -1431,32 +1421,18 @@ int main(void) {
   4324e4:	3183ff04 	addi	r6,r6,4092
   4324e8:	01c00144 	movi	r7,5
   4324ec:	043e0a40 	call	43e0a4 <OSTaskCreateExt>
-					CRITICAL_TASK_PRIORITY, CRITICAL_TASK_PRIORITY,
-					critical_task_stk, TASK_STACKSIZE, NULL,0);
-
-
-	//Signal that the core has finished initializing
-	altera_avalon_mutex_lock(mutex, 1);				//Acquire the hardware mutex
   4324f0:	d0a6f817 	ldw	r2,-25632(gp)
   4324f4:	1009883a 	mov	r4,r2
   4324f8:	01400044 	movi	r5,1
   4324fc:	04411200 	call	441120 <altera_avalon_mutex_lock>
-	{
-		cp->core1_ready = 1;
   432500:	d8800517 	ldw	r2,20(sp)
   432504:	00c00044 	movi	r3,1
   432508:	10c01315 	stw	r3,76(r2)
-	}
-	altera_avalon_mutex_unlock(mutex);				//Memory
   43250c:	d0a6f817 	ldw	r2,-25632(gp)
   432510:	1009883a 	mov	r4,r2
   432514:	04412080 	call	441208 <altera_avalon_mutex_unlock>
-	//Start OS
-	OSStart();
   432518:	04375680 	call	437568 <OSStart>
-	return 0;
   43251c:	0005883a 	mov	r2,zero
-}
   432520:	dfc00917 	ldw	ra,36(sp)
   432524:	dec00a04 	addi	sp,sp,40
   432528:	f800283a 	ret
