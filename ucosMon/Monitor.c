@@ -129,7 +129,7 @@ void schedule_task(void* pdata){
   	INT32U OSUsed;
 
   	// Check task usage
-	OSTaskStkChk(OS_PRIO_SELF, OSFree, OSUsed);
+	OSTaskStkChk(&OS_PRIO_SELF, &OSFree, &OSUsed);
 
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
@@ -141,7 +141,7 @@ void schedule_task(void* pdata){
 		sum_task(&s_args);
 
 		// Check task usage
-		OSTaskStkChk(OS_PRIO_SELF, OSFree, OSUsed);
+		OSTaskStkChk(&OS_PRIO_SELF, &OSFree, &OSUsed);
 
 		// Delay, then run Cruise Control function
 		OSTimeDly(20 - t_os);
