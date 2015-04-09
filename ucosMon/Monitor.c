@@ -125,8 +125,8 @@ void schedule_task(void* pdata){
 	}
 
 	// Variables used to check stack usage
-	INT32U OSFree;
-  	INT32U OSUsed;
+	INT32U OSFree = 0;
+  	INT32U OSUsed = 0;
   	OS_STK_DATA OSStkData;
   	OSStkData.OSFree = OSFree;
   	OSStkData.OSUsed = OSUsed;
@@ -165,7 +165,7 @@ void schedule_task(void* pdata){
 		printf("Done iteration.\n");
 
 		//Wait 10 seconds before trying again
-		OSTimeDlyHMSM(0, 0, 10, 0);
+		//OSTimeDlyHMSM(0, 0, 10, 0);
 
 
 
