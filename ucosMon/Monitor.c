@@ -86,66 +86,6 @@ int status;
 CriticalFunctionPointers cpg;
 INT8U err;
 
-
-// Initialize critical function arguments
-sum_data s_data;
-s_data.sum_in1 = 1.0;
-s_data.sum_in2 = 0.0;
-s_data.sum_out = 0.0;
-
-cruise_control_data cc_data;
-cc_data.cc_desired_speed = 0.0;
-cc_data.cc_current_speed = 0.0;
-
-derivative_data d_data;
-d_data.deriv_in = 0.0;
-d_data.deriv_out = 0.0;
-
-traction_control_data tc_data;
-tc_data.current_speed_powered = 0.0;
-tc_data.current_speed_unpowered = 1.0;
-tc_data.traction_control_feedback = 0.0;
-
-collision_avoidance_data ca_data;
-ca_data.ca_radar_sensor = 10.0;
-ca_data.ca_acceleration = 0.0;
-ca_data.ca_light_on = 0;
-
-airbag_data ab_data;
-ab_data.gain_in = 0.0;
-ab_data.activate_airbag = 0;
-
-sum_args s_args;
-s_args.priority = CRITICAL_TASK_PRIORITY;
-s_args.sum_data = &s_data;
-s_args.cruise_control_data = &cc_data;
-
-cruise_control_args cc_args;
-cc_args.priority = CRITICAL_TASK_PRIORITY;
-cc_args.cruise_control_data = &cc_data;
-cc_args.derivative_data = &d_data;
-cc_args.traction_control_data = &tc_data;
-
-derivative_args d_args;
-d_args.priority = CRITICAL_TASK_PRIORITY;
-d_args.derivative_data = &d_data;
-d_args.airbag_data = &ab_data;
-d_args.collision_avoidance_data = &ca_data;
-
-traction_control_args tc_args;
-tc_args.priority = CRITICAL_TASK_PRIORITY;
-tc_args.traction_control_data = &tc_data;
-tc_args.sum_data = &s_data;
-
-collision_avoidance_args ca_args;
-ca_args.priority = CRITICAL_TASK_PRIORITY;
-ca_args.collision_avoidance_data = &ca_data;
-
-airbag_args ab_args;
-ab_args.priority = CRITICAL_TASK_PRIORITY;
-ab_args.airbag_data = &ab_data;
-
-
 /*
  * This task sends instructions to cpu0 and cpu1.
  * It acquires the hardware mutex, it then puts
@@ -176,6 +116,64 @@ void schedule_task(void* pdata){
 
   	// Check task usage
 	OSTaskStkChk(OS_PRIO_SELF, &OSStkData);
+
+	// Initialize critical function arguments
+	sum_data s_data;
+	s_data.sum_in1 = 1.0;
+	s_data.sum_in2 = 0.0;
+	s_data.sum_out = 0.0;
+
+	cruise_control_data cc_data;
+	cc_data.cc_desired_speed = 0.0;
+	cc_data.cc_current_speed = 0.0;
+
+	derivative_data d_data;
+	d_data.deriv_in = 0.0;
+	d_data.deriv_out = 0.0;
+
+	traction_control_data tc_data;
+	tc_data.current_speed_powered = 0.0;
+	tc_data.current_speed_unpowered = 1.0;
+	tc_data.traction_control_feedback = 0.0;
+
+	collision_avoidance_data ca_data;
+	ca_data.ca_radar_sensor = 10.0;
+	ca_data.ca_acceleration = 0.0;
+	ca_data.ca_light_on = 0;
+
+	airbag_data ab_data;
+	ab_data.gain_in = 0.0;
+	ab_data.activate_airbag = 0;
+
+	sum_args s_args;
+	s_args.priority = CRITICAL_TASK_PRIORITY;
+	s_args.sum_data = &s_data;
+	s_args.cruise_control_data = &cc_data;
+
+	cruise_control_args cc_args;
+	cc_args.priority = CRITICAL_TASK_PRIORITY;
+	cc_args.cruise_control_data = &cc_data;
+	cc_args.derivative_data = &d_data;
+	cc_args.traction_control_data = &tc_data;
+
+	derivative_args d_args;
+	d_args.priority = CRITICAL_TASK_PRIORITY;
+	d_args.derivative_data = &d_data;
+	d_args.airbag_data = &ab_data;
+	d_args.collision_avoidance_data = &ca_data;
+
+	traction_control_args tc_args;
+	tc_args.priority = CRITICAL_TASK_PRIORITY;
+	tc_args.traction_control_data = &tc_data;
+	tc_args.sum_data = &s_data;
+
+	collision_avoidance_args ca_args;
+	ca_args.priority = CRITICAL_TASK_PRIORITY;
+	ca_args.collision_avoidance_data = &ca_data;
+
+	airbag_args ab_args;
+	ab_args.priority = CRITICAL_TASK_PRIORITY;
+	ab_args.airbag_data = &ab_data;
 
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
