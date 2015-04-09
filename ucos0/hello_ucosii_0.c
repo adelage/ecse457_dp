@@ -87,21 +87,18 @@ static void init_cpu0_isr(void) {
 
 INT8U err;
 void preemption_task(void* pdata){
-	
+	int done = 0;
+	int first = 0;
+	int t_os;
+
 	CriticalFunctionPointers* cp =
 				(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
 	pt = cp->task[0];
 
 	while(1){
-
-		//Wait for the interrupt to begin transfer
-		OSSemPend(mbox, 0, &err);
-
-		int done = 0;
-		int first = 0;
-		//barrier function
-		CriticalFunctionPointers* cp =
-				(CriticalFunctionPointers*) SHARED_MEMORY_BASE;
+		// Get initial time, then wait for 2 ticks
+		t_os = OSTimeGet();
+		OSTimeDly(2 - t_os);
 
 		//This is a crude way of synchronizing the beginning of the task
 		//on both cores

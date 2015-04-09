@@ -96,7 +96,8 @@ INT8U err;
  * to fingerprint using the CriticalFunctionPointers data structure
  */
 void schedule_task(void* pdata){
-	//int i;
+	int i;
+	int t_os;
 
 	printf("Monitor!\n");
 	CriticalFunctionPointers* cp =
@@ -107,15 +108,13 @@ void schedule_task(void* pdata){
 		printf ("No timestamp device available\n");
 	}
 
-	// Variables used to check stack usage
-	INT32U OSFree = 0;
-  	INT32U OSUsed = 0;
-  	OS_STK_DATA OSStkData;
-  	OSStkData.OSFree = OSFree;
-  	OSStkData.OSUsed = OSUsed;
 
-  	// Check task usage
-	OSTaskStkChk(OS_PRIO_SELF, &OSStkData);
+	// // Variables used to check stack usage
+	// INT32U OSFree = 0;
+ //  	INT32U OSUsed = 0;
+ //  	OS_STK_DATA OSStkData;
+ //  	OSStkData.OSFree = OSFree;
+ //  	OSStkData.OSUsed = OSUsed;
 
 	// Initialize critical function arguments
 	sum_data s_data;
@@ -177,32 +176,30 @@ void schedule_task(void* pdata){
 
 	while(1){
 		OSSemPend(start_schedule, 0, &err);
-		int i;
-		int t_os;
 
 		// Run Sum function
 		t_os = OSTimeGet();
 		sum_task(&s_args);
 
-		// Check task usage
-		OSTaskStkChk(OS_PRIO_SELF, &OSStkData);
-
 		// Delay, then run Cruise Control function
 		OSTimeDly(1 - t_os);
 		cruise_control_task(&cc_args);
+		t_os = OSTimeGet();
 
 
-		// //Acquire the mutex and set cores 1 and 2 to execute the first task
-		// altera_avalon_mutex_lock(mutex, 1);
-		// {
-		// 	for(i = 0; i < 2; i++){
-		// 		cp->task[i] = basicmath_test;
-		// 		cp->priority[i] = 3;
-		// 		cp->blocksize[i] = 0xfff;
-		// 		cp->args[i] = &args[0];
-		// 	}
-		// }
-		// altera_avalon_mutex_unlock(mutex);
+		//Acquire the mutex and set cores 1 and 2 to execute the first task
+		OSTimeDly(2 - t_os);
+		altera_avalon_mutex_lock(mutex, 1);
+		{
+			for(i = 0; i < 2; i++){
+				cp->task[i] = traction_control_task;
+				cp->priority[i] = CRITICAL_TASK_PRIORITY;
+				cp->blocksize[i] = 0xfff;
+				cp->args[i] = &tc_args;
+			}
+		}
+		altera_avalon_mutex_unlock(mutex);
+		t_os = OSTimeGet();
 
 		printf("Done iteration.\n");
 
